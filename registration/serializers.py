@@ -1,40 +1,32 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from phonenumber_field.serializerfields import PhoneNumberField
 
-from blog.models import Post
 from registration.models import RegistrationTry
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    blogs = serializers.PrimaryKeyRelatedField(many=True, queryset=Post.objects.all())
-
-    class Meta:
-        model = User
-        fields = ['id', 'url', 'username', 'email', 'blogs']
-
-
-class UserSerializerPutPost(serializers.HyperlinkedModelSerializer):
-    """
-    Allows Admin to create new author (user). We can add new fild - 'password' to make new user with password
-    """
-
-    class Meta:
-        model = User
-        fields = ['id', 'url', 'username', 'email']
 
 
 class RegisterConfirmSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
+    mobile_phone = PhoneNumberField(region="UA", required=True,max_length=13)
+    country = serializers.CharField(write_only=True, required=True)
+    city = serializers.CharField(write_only=True, required=True)
+    street = serializers.CharField(write_only=True, required=True)
+
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2', 'first_name', 'last_name')
+        fields = ('username', 'password', 'password2', 'first_name', 'last_name', 'mobile_phone', 'country', 'city',
+                  'street')
         extra_kwargs = {
             'username': {'required': True},
             'first_name': {'required': True},
             'last_name': {'required': True},
+            'country': {'required': True},
+            'city': {'required': True},
+            'street': {'required': True},
+            'mobile_phone': {'unique': True},   # todo if it correct?
         }
 
     def validate(self, attrs):
