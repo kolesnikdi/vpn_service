@@ -1,16 +1,17 @@
 import os
 
-from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.conf import settings
 
+from registration.models import WebMenuUser
+
 
 def final_send_mail(reg_try):
+    """ more data in context to customisation email"""
     context = {
         'registration_link': f'{settings.HOST}/registration/{reg_try.code}'
-        # more data here for customisation email.
     }
 
     registration_mail = {
@@ -27,16 +28,23 @@ def final_send_mail(reg_try):
 
 
 def final_creation(validated_data, reg_try):
-    user = User.objects.create(
-        username=validated_data['username'],
+    user = WebMenuUser.objects.create(
+        mobile_phone=validated_data['mobile_phone'],
         email=reg_try.email,
         first_name=validated_data['first_name'],
         last_name=validated_data['last_name'],
-        mobile_phone=validated_data['mobile_phone'],
+        fathers_name=validated_data['fathers_name'],
         country=validated_data['country'],
         city=validated_data['city'],
         street=validated_data['street'],
+        house_number=validated_data['house_number'],
+        flat_number=validated_data['flat_number'],
+        passport_series=validated_data['passport_series'],
+        passport_number=validated_data['passport_number'],
+        passport_date_of_issue=validated_data['passport_date_of_issue'],
+        passport_issuing_authority=validated_data['passport_issuing_authority'],
     )
+
     user.set_password(validated_data['password'])
     user.save()
     reg_try.confirmation_time = timezone.now()
