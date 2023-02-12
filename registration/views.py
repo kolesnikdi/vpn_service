@@ -6,25 +6,6 @@ from registration.serializers import RegisterConfirmSerializer, CreateRegisterTr
 from registration.business_logic import final_send_mail, final_creation
 from Web_Menu_DA.permissions import IsNotAuthenticated
 
-# """Next 12 string need for correct work knox Authentication"""
-#
-# from django.contrib.auth import login
-#
-# from rest_framework import permissions
-# from rest_framework.authtoken.serializers import AuthTokenSerializer
-# from knox.views import LoginView as KnoxLoginView
-
-
-# class LoginView(KnoxLoginView):
-#     permission_classes = (permissions.AllowAny,)
-#     queryset = UserModel.objects.all()    # maybe fix
-#
-#     def post(self, request, format=None):
-#         serializer = AuthTokenSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         login(request, user)
-#         return super(LoginView, self).post(request, format=None)
 
 class RegisterTryView(generics.CreateAPIView):
     serializer_class = CreateRegisterTrySerializer

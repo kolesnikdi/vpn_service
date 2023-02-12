@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     # liberys
     'rest_framework',
     "phonenumber_field",
-    'knox',
     # applications
     'client',
     'company',
@@ -132,7 +131,6 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': 'knox.auth.TokenAuthentication',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
@@ -141,19 +139,3 @@ REST_FRAMEWORK = {
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.ukr.net')
 EMAIL_PORT = 2525
 EMAIL_USE_SSL = True
-
-# knox
-KNOX_TOKEN_MODEL = 'knox.AuthToken'
-
-REST_KNOX = {
-    'SECURE_HASH_ALGORITHM': 'hashlib.md5',
-    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-    'TOKEN_TTL': timedelta(hours=24),
-    'USER_SERIALIZER': 'knox.serializers.UserSerializer',
-    'TOKEN_LIMIT_PER_USER': None,
-    'AUTO_REFRESH': True,
-    'MIN_REFRESH_INTERVAL': 360,
-    'AUTH_HEADER_PREFIX': 'Token',
-    'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
-    'TOKEN_MODEL': 'knox.AuthToken',
-}
