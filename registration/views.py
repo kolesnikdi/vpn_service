@@ -1,30 +1,50 @@
-from rest_framework import generics, status
+from rest_framework import generics, viewsets, status
 from rest_framework.response import Response
 
-from registration.models import RegistrationTry
-from registration.serializers import RegisterConfirmSerializer, CreateRegisterTrySerializer, RegisterUserSerializer
+
+from registration.models import RegistrationTry, WebMenuUser
+from registration.serializers import RegisterConfirmSerializer, CreateRegisterTrySerializer, WebMenuUserSerializer,\
+    LoginWebMenuUserSerializer
 from registration.business_logic import final_send_mail, final_creation
 from Web_Menu_DA.permissions import IsNotAuthenticated
 
-# """Next 12 string need for correct work knox Authentication"""
-#
-# from django.contrib.auth import login
-#
-# from rest_framework import permissions
-# from rest_framework.authtoken.serializers import AuthTokenSerializer
-# from knox.views import LoginView as KnoxLoginView
+"""Next 12 string need for correct work knox Authentication"""
+
+from django.contrib.auth import login
+
+from rest_framework import permissions
+from knox.models import AuthToken
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from knox.views import LoginView as KnoxLoginView
 
 
-# class LoginView(KnoxLoginView):
-#     permission_classes = (permissions.AllowAny,)
-#     queryset = UserModel.objects.all()    # maybe fix
-#
-#     def post(self, request, format=None):
-#         serializer = AuthTokenSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         login(request, user)
-#         return super(LoginView, self).post(request, format=None)
+# class WebMenuUserViewSet(viewsets.ModelViewSet):
+class WebMenuUserViewSet(generics.RetrieveAPIView):
+#     queryset = WebMenuUser.objects.all().order_by('-date_joined')
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = WebMenuUserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
+class LoginView(generics.GenericAPIView):
+    # permission_classes = (permissions.AllowAny,)
+    serializer_class = LoginWebMenuUserSerializer
+    # queryset = WebMenuUser.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        token = AuthToken.objects.create(user)[1]
+
+        return Response({
+            "user": LoginWebMenuUserSerializer(user, context=self.get_serializer_context()).data,
+            # "token": AuthToken.objects.create(user)[1]
+            "token": WebMenuUser.objects.get(token=token)
+        })
+
 
 class RegisterTryView(generics.CreateAPIView):
     serializer_class = CreateRegisterTrySerializer
@@ -56,7 +76,7 @@ class RegisterConfirmView(generics.CreateAPIView):
         user = final_creation(serializer.validated_data, reg_try)
 
         return Response(  # todo Make variable for different requests (Client, owner, manager)
-            RegisterUserSerializer(instance=user).data,   # todo return variable for different requests (Client, owner, manager)
+            WebMenuUserSerializer(instance=user).data,   # todo return variable for different requests (Client, owner, manager)
             status=status.HTTP_201_CREATED,
         )
 
