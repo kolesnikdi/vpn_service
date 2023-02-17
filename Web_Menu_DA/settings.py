@@ -31,18 +31,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # liberys
+    # libraries
     'rest_framework',
-    "phonenumber_field",
+    'phonenumber_field',
     'knox',
     # applications
-    'client',
-    'company',
-    'location',
-    'manager',
-    'menu',
-    'owner',
-    'product',
+    # 'client',
+    # 'company',
+    # 'location',
+    # 'manager',
+    # 'menu',
+    # 'owner',
+    # 'product',
     'registration',
 ]
 

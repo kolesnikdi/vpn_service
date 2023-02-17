@@ -1,4 +1,4 @@
-from rest_framework import generics, viewsets, status
+from rest_framework import generics, status
 from rest_framework.response import Response
 
 
@@ -18,7 +18,6 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 
 
-# class WebMenuUserViewSet(viewsets.ModelViewSet):
 class WebMenuUserViewSet(generics.RetrieveAPIView):
 #     queryset = WebMenuUser.objects.all().order_by('-date_joined')
     permission_classes = [permissions.IsAuthenticated]
