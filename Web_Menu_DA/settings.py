@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 """Next 2 string need for correct work knox Authentication"""
 from datetime import timedelta
 from rest_framework.settings import api_settings
@@ -21,7 +22,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -31,18 +31,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # libraries
     'rest_framework',
-    'client',
-    'company',
-    'location',
-    'manager',
-    'menu',
-    'owner',
-    'product',
+    'phonenumber_field',
+    # applications
+    # 'client',
+    # 'company',
+    # 'location',
+    # 'manager',
+    # 'menu',
+    # 'owner',
+    # 'product',
     'registration',
-    "phonenumber_field",
-    'knox',
 ]
+
+AUTH_USER_MODEL = 'registration.WebMenuUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Web_Menu_DA.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -84,7 +86,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -104,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -116,11 +116,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
@@ -131,7 +131,6 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
@@ -140,19 +139,3 @@ REST_FRAMEWORK = {
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.ukr.net')
 EMAIL_PORT = 2525
 EMAIL_USE_SSL = True
-
-# knox
-KNOX_TOKEN_MODEL = 'knox.AuthToken'
-
-REST_KNOX = {
-  'SECURE_HASH_ALGORITHM': 'hashlib.md5',
-  'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-  'TOKEN_TTL': timedelta(hours=24),
-  'USER_SERIALIZER': 'knox.serializers.UserSerializer',
-  'TOKEN_LIMIT_PER_USER': None,
-  'AUTO_REFRESH': True,
-  'MIN_REFRESH_INTERVAL': 360,
-  'AUTH_HEADER_PREFIX': 'Token',
-  'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
-  'TOKEN_MODEL': 'knox.AuthToken',
-    }

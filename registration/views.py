@@ -1,30 +1,10 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from client.serializers import ClientSerializer
 from registration.models import RegistrationTry
-from registration.serializers import RegisterConfirmSerializer, CreateRegisterTrySerializer
+from registration.serializers import RegisterConfirmSerializer, CreateRegisterTrySerializer, RegisterUserSerializer
 from registration.business_logic import final_send_mail, final_creation
 from Web_Menu_DA.permissions import IsNotAuthenticated
-
-"""Next 12 string need for correct work knox Authentication"""
-
-from django.contrib.auth import login
-
-from rest_framework import permissions
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from knox.views import LoginView as KnoxLoginView
-
-
-class LoginView(KnoxLoginView):
-    permission_classes = (permissions.AllowAny,)
-
-    def post(self, request, format=None):
-        serializer = AuthTokenSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request, user)
-        return super(LoginView, self).post(request, format=None)
 
 
 class RegisterTryView(generics.CreateAPIView):
@@ -51,14 +31,13 @@ class RegisterConfirmView(generics.CreateAPIView):
     lookup_field = 'code'
 
     def post(self, request, *args, **kwargs):
-        serializer_context = {'request': request}  # need to use HyperlinkedModelSerializer in ClientSerializer
         reg_try = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = final_creation(serializer.validated_data, reg_try)
 
         return Response(  # todo Make variable for different requests (Client, owner, manager)
-            ClientSerializer(instance=user, context=serializer_context).data,
+            RegisterUserSerializer(instance=user).data,   # todo return variable for different requests (Client, owner, manager)
             status=status.HTTP_201_CREATED,
         )
 
