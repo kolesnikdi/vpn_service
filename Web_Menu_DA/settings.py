@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # libraries
     'rest_framework',
+    'rest_framework.authtoken',
     'phonenumber_field',
     'knox',
     # applications
@@ -132,7 +133,8 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),   # todo
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
@@ -146,11 +148,12 @@ EMAIL_USE_SSL = True
 KNOX_TOKEN_MODEL = 'knox.AuthToken'
 
 REST_KNOX = {
-    'SECURE_HASH_ALGORITHM': 'hashlib.md5',
+    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
     'TOKEN_TTL': timedelta(hours=24),
-    'USER_SERIALIZER': 'knox.serializers.UserSerializer',
-    'TOKEN_LIMIT_PER_USER': None,
+    # 'USER_SERIALIZER': 'registration.serializers.WebMenuUserSerializer',
+    'USER_SERIALIZER': 'knox.serializers.UserSerializer',   # todo
+    'TOKEN_LIMIT_PER_USER': 2,
     'AUTO_REFRESH': True,
     'MIN_REFRESH_INTERVAL': 360,
     'AUTH_HEADER_PREFIX': 'Token',

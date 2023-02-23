@@ -10,11 +10,10 @@ from registration.models import RegistrationTry
 class LoginWebMenuUserSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
-    # username = serializers.CharField(label='Username', write_only=True,)
-    # password = serializers.CharField(label='Password', trim_whitespace=False, write_only=True,)
 
     def validate(self, data):
         user = authenticate(**data)
+
         if user and user.is_active:
             return user
         raise serializers.ValidationError('Access denied: wrong username or password.')

@@ -16,33 +16,37 @@ from rest_framework import permissions
 from knox.models import AuthToken
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
+from knox.auth import TokenAuthentication
 
 
 class WebMenuUserViewSet(generics.RetrieveAPIView):
-#     queryset = WebMenuUser.objects.all().order_by('-date_joined')
+#     queryset = WebMenuUser.objects.all().order_by('-date_joined')   # todo
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = WebMenuUserSerializer
+    authentication_classes = (TokenAuthentication,)    # need in every view wear authentication is necessarily
 
     def get_object(self):
         return self.request.user
 
 
-class LoginView(generics.GenericAPIView):
-    # permission_classes = (permissions.AllowAny,)
-    serializer_class = LoginWebMenuUserSerializer
-    # queryset = WebMenuUser.objects.all()
+class LoginView(KnoxLoginView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = LoginWebMenuUserSerializer   # todo
+    authentication_classes = []
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
+        # login(request, user)
         token = AuthToken.objects.create(user)[1]
 
+        print(request.headers)
+        # return super(LoginView, self).post(request, format=None)
         return Response({
-            "user": LoginWebMenuUserSerializer(user, context=self.get_serializer_context()).data,
-            # "token": AuthToken.objects.create(user)[1]
-            "token": WebMenuUser.objects.get(token=token)
-        })
+                    "user": WebMenuUserSerializer(user).data,
+                    "token": token     # todo
+                })
 
 
 class RegisterTryView(generics.CreateAPIView):
