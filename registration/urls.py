@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from knox.views import LogoutView, LogoutAllView
 
-from registration.views import RegisterTryView, RegisterConfirmView, LoginView, WebMenuUserViewSet
+from registration.views import RegisterTryView, RegisterConfirmView, LoginView
 
 
 urlpatterns = [
@@ -11,5 +11,4 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('logoutall/', LogoutAllView.as_view(), name='logoutall'),
-    path('user/', WebMenuUserViewSet.as_view(), name='user'),
 ]
