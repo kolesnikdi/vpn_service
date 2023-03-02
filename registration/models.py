@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy
 from registration.managers import CustomUserManager
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -31,7 +31,7 @@ class WebMenuUser(AbstractBaseUser, PermissionsMixin):
     passport_number = models.CharField('passport number', max_length=6)
     passport_date_of_issue = models.DateField('passport date of issue', null=True)
     passport_issuing_authority = models.CharField('passport issuing authority', max_length=100)
-    email = models.EmailField(_('email address'), unique=True, db_index=True, max_length=254,
+    email = models.EmailField(gettext_lazy('email address'), unique=True, db_index=True, max_length=254,
                               error_messages={'unique': 'Not a valid email. Enter again and correctly.'})
     password = models.CharField('password', max_length=128)
     is_staff = models.BooleanField('staff status', default=False)
@@ -41,8 +41,7 @@ class WebMenuUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    objects = CustomUserManager()    #    """ Need to createsuperuser"""
-
+    objects = CustomUserManager()   # """ Need to createsuperuser"""
 
     def __str__(self):
         return self.email

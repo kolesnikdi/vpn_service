@@ -1,11 +1,25 @@
 from rest_framework import serializers
 from registration.models import WebMenuUser
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth import authenticate
+
 
 from registration.models import RegistrationTry
 
 
-class RegisterUserSerializer(serializers.ModelSerializer):
+class LoginWebMenuUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError('Access denied: wrong username or password.')
+
+
+class WebMenuUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebMenuUser
         fields = ['id', 'email', 'mobile_phone', 'first_name', 'last_name', 'fathers_name', 'country', 'city', 'street',

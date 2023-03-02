@@ -1,7 +1,5 @@
 from rest_framework import permissions, exceptions
 
-# from blog.models import Post
-
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
