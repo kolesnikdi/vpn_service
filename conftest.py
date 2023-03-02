@@ -80,17 +80,18 @@ def my_user_pass(django_user_model, randomizer):
 def authenticated_client(api_client, my_user_pass):
     token = AuthToken.objects.create(my_user_pass[0])[1]
     api_client.user = my_user_pass[0]
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
     return api_client, token  # return api_client with authenticated user (like method)
 
 
 @pytest.fixture(scope='function')
 def authenticated_client_2(api_client, my_user_pass):
-    # api_client.credentials(Authorization=f'Token {token2}')
     token = AuthToken.objects.create(my_user_pass[0])[1]
     token2 = AuthToken.objects.create(my_user_pass[0])[1]
     api_client.user = my_user_pass[0]
-    return api_client, token
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token2}')
+    return api_client, token2
 
 
 """fixture for registration app"""

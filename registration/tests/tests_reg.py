@@ -128,7 +128,6 @@ class TestApiClientView:
         assert for_check_user.passport_date_of_issue == validated_data['passport_date_of_issue']
         assert for_check_user.passport_issuing_authority == validated_data['passport_issuing_authority']
 
-
     @pytest.mark.django_db
     def test_full_registration_reg_done_code(self, api_client, randomizer, reg_done_code):
         validated_data = randomizer.user()
@@ -170,9 +169,9 @@ class TestKnoxView:
         assert resp_json['token'] is not None
         assert resp_json['expiry'] is not None
         assert AuthToken.objects.filter(user_id=user.id).exists()
-        # headers = {'Authorization': f'Token {resp_json["token"]}'}                # todo wher my problem?
-        # response2 = api_client.post(reverse('user'), headers=headers, format='json')
-        # assert response2.status_code == status.HTTP_200_OK
+        api_client.credentials(HTTP_AUTHORIZATION=f'Token {resp_json["token"]}')
+        response2 = api_client.get(reverse('user'), format='json')
+        assert response2.status_code == status.HTTP_200_OK
 
     @pytest.mark.django_db
     def test_login_invalid_data(self, api_client, randomizer):
@@ -186,30 +185,19 @@ class TestKnoxView:
         assert response.json()['non_field_errors'] == ['Access denied: wrong username or password.']
 
     @pytest.mark.django_db
-    def test_logout(self, authenticated_client):  # todo wher my problem?
+    def test_logout(self, authenticated_client):
         client, token = authenticated_client
-        headers = {'Authorization': f'Token {token}'}
-        response = client.post(reverse('logout'), headers=headers, format='json')
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED  # todo it's incorrect
-        for_check_token = AuthToken.objects.filter(user_id=client.user.id).first()
-        assert for_check_token.digest is None
+        response = client.post(reverse('logout'), format='json')
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not AuthToken.objects.filter(user_id=client.user.id).exists()
         response = client.get(reverse('user'))
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     @pytest.mark.django_db
     def test_logoutall(self, authenticated_client_2):  # todo wher my problem?
         client, token = authenticated_client_2
-        headers = {'Authorization': f'Token {token}'}
-        response = client.post(reverse('logout'), headers=headers, format='json')
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED  # todo it's incorrect
-        for_check_token = AuthToken.objects.filter(user_id=client.user.id).first()
-        assert for_check_token.digest is None
+        response = client.post(reverse('logoutall'), format='json')
+        assert response.status_code == status.HTTP_204_NO_CONTENT  # todo it's incorrect
+        assert not AuthToken.objects.filter(user_id=client.user.id).exists()
         response = client.get(reverse('user'))
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-
-    # @pytest.mark.django_db                                         # todo wher my problem?
-    # def test_login_new_page(self, authenticated_client):
-    #     client, token = authenticated_client
-    #     headers = {'Authorization': f'Token {token}'}
-    #     response = authenticated_client[0].post(reverse('user'), headers=headers, format='json')
-    #     assert response.status_code == status.HTTP_200_OK
