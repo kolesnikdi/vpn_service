@@ -8,6 +8,7 @@ from django.urls import reverse
 from knox.models import AuthToken
 from rest_framework.test import APIClient
 
+from company.models import Company, Address
 from registration.models import RegistrationTry
 
 """randomizers"""
@@ -31,6 +32,10 @@ class Randomizer:
     def random_name(self):
         """ randomize data for first_name, last_name"""
         return ''.join(random.choice(string.ascii_letters) for i in range(10)).title()
+
+    def random_phone(self):
+        """ randomize data for mobile phone"""
+        return '+38063' + ''.join(random.choice(string.digits) for i in range(7))
 
     def user(self):
         """ randomize data user"""
@@ -60,6 +65,27 @@ class Randomizer:
         """ randomize digits"""
         return ''.join(random.choice(string.digits) for i in range(10))
 
+    def company_data(self):
+        data = {
+            'legal_name': self.random_name(),
+            'logo': None,  # todo upload image
+            'legal_address': {'country': self.random_name(),
+                              'city': self.random_name(),
+                              'street': self.random_name(),
+                              'house_number': self.random_digits(),
+                              'flat_number': self.random_digits()},
+            'actual_address': {'country': self.random_name(),
+                               'city': self.random_name(),
+                               'street': self.random_name(),
+                               'house_number': self.random_digits(),
+                               'flat_number': self.random_digits()},
+            'code_USREOU': self.random_digits(),
+            'phone': self.random_phone(),
+            'email': self.email(),
+        }
+
+        return data
+
 
 """created custom users"""
 
@@ -72,7 +98,22 @@ def api_client():
 @pytest.fixture(scope='function')
 def my_user_pass(django_user_model, randomizer):
     password = randomizer.upp2_data()
-    user = django_user_model.objects.create_user(email=randomizer.email(), password=password)
+    email = randomizer.email()
+    user = django_user_model.objects.create_user(email=email, password=password)
+    return user, password
+
+
+@pytest.fixture(scope='function')
+def my_user(my_user_pass):
+    return my_user_pass[0]
+
+
+@pytest.fixture(scope='function')
+def another_user_pass(django_user_model, randomizer):
+    password = randomizer.upp2_data()
+    email = randomizer.email()
+    user = django_user_model.objects.create_user(email=email, password=password,
+                                                 mobile_phone=randomizer.random_phone())
     return user, password
 
 
@@ -80,18 +121,21 @@ def my_user_pass(django_user_model, randomizer):
 def authenticated_client(api_client, my_user_pass):
     token = AuthToken.objects.create(my_user_pass[0])[1]
     api_client.user = my_user_pass[0]
+    # api_client.user_password = my_user_pass[1] # fixme
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
     return api_client, token  # return api_client with authenticated user (like method)
 
 
 @pytest.fixture(scope='function')
-def authenticated_client_2(api_client, my_user_pass):
-    token = AuthToken.objects.create(my_user_pass[0])[1]
-    token2 = AuthToken.objects.create(my_user_pass[0])[1]
-    api_client.user = my_user_pass[0]
+def authenticated_client_2_pass(another_user_pass):
+    api_client = APIClient()
+    token = AuthToken.objects.create(another_user_pass[0])[1]
+    token2 = AuthToken.objects.create(another_user_pass[0])[1]
+    api_client.user = another_user_pass[0]
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {token2}')
-    return api_client, token2
+
+    return api_client, token2, another_user_pass[1]
 
 
 """fixture for registration app"""
@@ -116,3 +160,21 @@ def reg_done_code(api_client, reg_try, randomizer):
     api_client.post(url, data=validated_data, format='json')
     for_check_reg_try = RegistrationTry.objects.get(id=data_reg_try.id)
     return for_check_reg_try.code
+
+
+"""created custom company"""
+
+
+@pytest.fixture(scope='function')
+def custom_company(authenticated_client_2_pass, randomizer):
+    company_data = randomizer.company_data()
+    company = Company.objects.create(
+        owner=authenticated_client_2_pass[0].user,
+        legal_name=company_data['legal_name'],
+        legal_address=Address.objects.create(**company_data['legal_address']),
+        actual_address=Address.objects.create(**company_data['actual_address']),
+        code_USREOU=company_data['code_USREOU'],
+        phone=company_data['phone'],
+        email=company_data['email']
+    )
+    return company, authenticated_client_2_pass[2]

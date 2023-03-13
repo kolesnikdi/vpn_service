@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'knox',
     # applications
     # 'client',
-    # 'company',
+    'company',
     # 'location',
     # 'manager',
     # 'menu',
@@ -123,7 +123,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-MEDIA_ROOT = 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Default primary key field type
@@ -142,12 +142,11 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.ukr.net')
 EMAIL_PORT = 2525
 EMAIL_USE_SSL = True
 
-
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
     'TOKEN_TTL': timedelta(hours=24),
-    'USER_SERIALIZER': 'registration.serializers.WebMenuUserSerializer',      # displays all data in the view
+    'USER_SERIALIZER': 'registration.serializers.WebMenuUserSerializer',  # displays all data in the view
     'TOKEN_LIMIT_PER_USER': 2,
     'AUTO_REFRESH': True,
     'MIN_REFRESH_INTERVAL': 360,
