@@ -1,15 +1,18 @@
 from rest_framework import permissions, exceptions
 
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsOwnerOr404(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.
     """
 
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.author == request.user
+        if hasattr(obj, 'owner'):   # check if owner exist
+            if obj.owner == request.user:   # check if owner == user
+                return True
+            else:
+                raise exceptions.NotFound()
+        return True
 
 
 class IsNotAuthenticated(permissions.BasePermission):

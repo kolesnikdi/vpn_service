@@ -194,8 +194,8 @@ class TestKnoxView:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     @pytest.mark.django_db
-    def test_logoutall(self, authenticated_client_2):  # todo wher my problem?
-        client, token = authenticated_client_2
+    def test_logoutall(self, authenticated_client_2_pass):  # todo wher my problem?
+        client, token, _ = authenticated_client_2_pass
         response = client.post(reverse('logoutall'), format='json')
         assert response.status_code == status.HTTP_204_NO_CONTENT  # todo it's incorrect
         assert not AuthToken.objects.filter(user_id=client.user.id).exists()
