@@ -9,9 +9,8 @@ from company.business_logic import user_directory_path, validate_image_size
 
 class Company(models.Model):
     owner = models.ForeignKey('registration.WebMenuUser', related_name='company', on_delete=models.DO_NOTHING)
-    url_height = models.PositiveIntegerField(blank=True,
-                                             null=True)  # todo https://www.deanmontgomery.com/2020/01/16/django-query-imagefield-by-height-or-width/
-    url_width = models.PositiveIntegerField(blank=True, null=True)  # todo getatrr() Atribut name must be string
+    url_height = models.PositiveIntegerField(blank=True, null=True)
+    url_width = models.PositiveIntegerField(blank=True, null=True)
     logo = models.ImageField(upload_to=user_directory_path, height_field='url_height', width_field='url_width',
                              blank=True, null=True, validators=[validate_image_size])
     legal_name = models.CharField('legal_name', max_length=50, unique=True)

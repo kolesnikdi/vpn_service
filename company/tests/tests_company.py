@@ -2,6 +2,7 @@ import pytest
 
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
 
 from rest_framework import status
 from django.core import exceptions
@@ -38,13 +39,12 @@ class TestBusinessLogic:
         assert exc.type == exceptions.ValidationError
 
     def test_allowed_size_valid(self):
-        """ 49str replaces 44-46 str but don't work in 'pytest' command from Terminal """
-        with open(r'C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\company\tests\Valid_logo.jpg',
-                  'rb') as f:
-            read_data = f.read()
-        test_logo = SimpleUploadedFile(name='Valid_logo.jpg',
-                                       # content=open('Valid_logo.jpg', 'rb').read(), content_type='image/jpeg')
-                                       content=read_data, content_type='image/jpeg')
+        file_path = str(settings.BASE_DIR) + r'\company\tests\Valid_logo.jpg'
+        test_logo = SimpleUploadedFile(
+            name='Valid_logo.jpg',
+            content=open(file_path, 'rb').read(),
+            content_type='image/jpeg',
+        )
         validate_image_size(test_logo)
 
 

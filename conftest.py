@@ -104,6 +104,11 @@ def my_user_pass(django_user_model, randomizer):
 
 
 @pytest.fixture(scope='function')
+def my_user(my_user_pass):
+    return my_user_pass[0]
+
+
+@pytest.fixture(scope='function')
 def another_user_pass(django_user_model, randomizer):
     password = randomizer.upp2_data()
     email = randomizer.email()
@@ -116,6 +121,7 @@ def another_user_pass(django_user_model, randomizer):
 def authenticated_client(api_client, my_user_pass):
     token = AuthToken.objects.create(my_user_pass[0])[1]
     api_client.user = my_user_pass[0]
+    # api_client.user_password = my_user_pass[1] # fixme
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
     return api_client, token  # return api_client with authenticated user (like method)
@@ -172,8 +178,3 @@ def custom_company(authenticated_client_2_pass, randomizer):
         email=company_data['email']
     )
     return company, authenticated_client_2_pass[2]
-
-# @pytest.fixture     # todo How to use it?
-# @pytest.mark.datafiles(r'C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\company\tests')
-# def inv_ids(datafiles):
-#     return datafiles
