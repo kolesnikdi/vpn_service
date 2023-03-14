@@ -83,7 +83,6 @@ class Randomizer:
             'phone': self.random_phone(),
             'email': self.email(),
         }
-
         return data
 
 
@@ -95,47 +94,47 @@ def api_client():
     return APIClient()
 
 
-@pytest.fixture(scope='function')
-def my_user_pass(django_user_model, randomizer):
-    password = randomizer.upp2_data()
-    email = randomizer.email()
-    user = django_user_model.objects.create_user(email=email, password=password)
-    return user, password
-
-
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='function')  # todo don't use anywhere
 def my_user(my_user_pass):
     return my_user_pass[0]
 
 
 @pytest.fixture(scope='function')
+def my_user_pass(django_user_model, randomizer):
+    password = randomizer.upp2_data()
+    user = django_user_model.objects.create_user(email=randomizer.email(), password=password)
+    user.user_password = password
+    return user
+
+
+@pytest.fixture(scope='function')
 def another_user_pass(django_user_model, randomizer):
     password = randomizer.upp2_data()
-    email = randomizer.email()
-    user = django_user_model.objects.create_user(email=email, password=password,
-                                                 mobile_phone=randomizer.random_phone())
-    return user, password
+    user = django_user_model.objects.create_user(
+        email=randomizer.email(),
+        password=password,
+        mobile_phone=randomizer.random_phone(),
+    )
+    user.user_password = password
+    return user
 
 
 @pytest.fixture(scope='function')
 def authenticated_client(api_client, my_user_pass):
-    token = AuthToken.objects.create(my_user_pass[0])[1]
-    api_client.user = my_user_pass[0]
-    # api_client.user_password = my_user_pass[1] # fixme
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
-
-    return api_client, token  # return api_client with authenticated user (like method)
+    api_client.user_token = AuthToken.objects.create(my_user_pass)[1]
+    api_client.user = my_user_pass
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
+    return api_client
 
 
 @pytest.fixture(scope='function')
 def authenticated_client_2_pass(another_user_pass):
     api_client = APIClient()
-    token = AuthToken.objects.create(another_user_pass[0])[1]
-    token2 = AuthToken.objects.create(another_user_pass[0])[1]
-    api_client.user = another_user_pass[0]
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {token2}')
-
-    return api_client, token2, another_user_pass[1]
+    token = AuthToken.objects.create(another_user_pass)[1]
+    api_client.user_token = AuthToken.objects.create(another_user_pass)[1]
+    api_client.user = another_user_pass
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
+    return api_client
 
 
 """fixture for registration app"""
@@ -169,7 +168,7 @@ def reg_done_code(api_client, reg_try, randomizer):
 def custom_company(authenticated_client_2_pass, randomizer):
     company_data = randomizer.company_data()
     company = Company.objects.create(
-        owner=authenticated_client_2_pass[0].user,
+        owner=authenticated_client_2_pass.user,
         legal_name=company_data['legal_name'],
         legal_address=Address.objects.create(**company_data['legal_address']),
         actual_address=Address.objects.create(**company_data['actual_address']),
@@ -177,4 +176,5 @@ def custom_company(authenticated_client_2_pass, randomizer):
         phone=company_data['phone'],
         email=company_data['email']
     )
-    return company, authenticated_client_2_pass[2]
+    company.user_password = authenticated_client_2_pass.user.user_password
+    return company

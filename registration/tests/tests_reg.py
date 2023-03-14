@@ -64,11 +64,7 @@ class TestApiClientView:
 
     @pytest.mark.django_db
     def test_registration_valid_data(self, api_client, randomizer):
-        url = reverse('user_reg')
-        data = {
-            'email': randomizer.email(),
-        }
-        response = api_client.post(url, data=data, format='json')
+        response = api_client.post(reverse('user_reg'), data={'email': randomizer.email()}, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         assert response.json()  # check that response is not empty
         assert set(response.json().keys()) == set(CreateRegisterTrySerializer.Meta.fields)
@@ -76,36 +72,32 @@ class TestApiClientView:
 
     @pytest.mark.django_db
     def test_registration_null_data(self, api_client):
-        url = reverse('user_reg')
-        data = {
-            'email': None,
-        }
-        response = api_client.post(url, data=data, format='json')
+        response = api_client.post(reverse('user_reg'), data={'email': None}, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()
 
     @pytest.mark.django_db
     def test_full_registration_valid_data(self, api_client, reg_try, randomizer):
         validated_data = randomizer.user()
-        test_data = {'password': validated_data['password'],
-                     'password2': validated_data['password'],
-                     'first_name': validated_data['first_name'],
-                     'last_name': validated_data['last_name'],
-                     'fathers_name': validated_data['fathers_name'],
-                     'mobile_phone': validated_data['mobile_phone'],
-                     'country': validated_data['country'],
-                     'city': validated_data['city'],
-                     'street': validated_data['street'],
-                     'house_number': validated_data['house_number'],
-                     'flat_number': validated_data['flat_number'],
-                     'passport_series': validated_data['passport_series'],
-                     'passport_number': validated_data['passport_number'],
-                     'passport_date_of_issue': validated_data['passport_date_of_issue'],
-                     'passport_issuing_authority': validated_data['passport_issuing_authority'],
-                     }
+        data = {'password': validated_data['password'],
+                'password2': validated_data['password'],
+                'first_name': validated_data['first_name'],
+                'last_name': validated_data['last_name'],
+                'fathers_name': validated_data['fathers_name'],
+                'mobile_phone': validated_data['mobile_phone'],
+                'country': validated_data['country'],
+                'city': validated_data['city'],
+                'street': validated_data['street'],
+                'house_number': validated_data['house_number'],
+                'flat_number': validated_data['flat_number'],
+                'passport_series': validated_data['passport_series'],
+                'passport_number': validated_data['passport_number'],
+                'passport_date_of_issue': validated_data['passport_date_of_issue'],
+                'passport_issuing_authority': validated_data['passport_issuing_authority'],
+                }
         data_reg_try = RegistrationTry.objects.get(email=reg_try.data['email'])
         url = reverse('registration_confirm', args=[data_reg_try.code])
-        response = api_client.post(url, data=test_data, format='json')
+        response = api_client.post(url, data=data, format='json')
 
         assert response.status_code == status.HTTP_201_CREATED
         assert response.json()
@@ -152,23 +144,19 @@ class TestApiClientView:
 class TestKnoxView:
     @pytest.mark.django_db
     def test_login_valid_data(self, api_client, my_user_pass):
-        user, password = my_user_pass
-        AuthToken.objects.filter(user_id=user.id).delete()  # delete from db all tokens for user
-        response = api_client.post(
-            reverse('login'),
-            data={
-                'username': user.email,
-                'password': password,
-            },
-            format='json',
-        )
+        AuthToken.objects.filter(user_id=my_user_pass.id).delete()  # delete from db all tokens for user
+        response = api_client.post(reverse('login'),
+                                   data={
+                                       'username': my_user_pass.email,
+                                       'password': my_user_pass.user_password,
+                                   }, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         resp_json = response.json()
         assert resp_json
         assert set(resp_json['user']) >= set(WebMenuUserSerializer.Meta.fields)
         assert resp_json['token'] is not None
         assert resp_json['expiry'] is not None
-        assert AuthToken.objects.filter(user_id=user.id).exists()
+        assert AuthToken.objects.filter(user_id=my_user_pass.id).exists()
         api_client.credentials(HTTP_AUTHORIZATION=f'Token {resp_json["token"]}')
         response2 = api_client.get(reverse('user'), format='json')
         assert response2.status_code == status.HTTP_200_OK
@@ -186,18 +174,16 @@ class TestKnoxView:
 
     @pytest.mark.django_db
     def test_logout(self, authenticated_client):
-        client, token = authenticated_client
-        response = client.post(reverse('logout'), format='json')
+        response = authenticated_client.post(reverse('logout'), format='json')
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert not AuthToken.objects.filter(user_id=client.user.id).exists()
-        response = client.get(reverse('user'))
+        assert not AuthToken.objects.filter(user_id=authenticated_client.user.id).exists()
+        response = authenticated_client.get(reverse('user'))
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     @pytest.mark.django_db
     def test_logoutall(self, authenticated_client_2_pass):
-        client, token, _ = authenticated_client_2_pass
-        response = client.post(reverse('logoutall'), format='json')
+        response = authenticated_client_2_pass.post(reverse('logoutall'), format='json')
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert not AuthToken.objects.filter(user_id=client.user.id).exists()
-        response = client.get(reverse('user'))
+        assert not AuthToken.objects.filter(user_id=authenticated_client_2_pass.user.id).exists()
+        response = authenticated_client_2_pass.get(reverse('user'))
         assert response.status_code == status.HTTP_401_UNAUTHORIZED

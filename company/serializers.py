@@ -54,4 +54,3 @@ class CreateCompanySerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"password": "Password incorrect."})
         attrs.pop('password')  # we must delete password for correct work serializer
         return attrs
-
