@@ -16,7 +16,7 @@ class TestValidatePassword:
     def test_passwords_incorrect(self, authenticated_client, randomizer):
         data = randomizer.company_data()
         data.setdefault('password', randomizer.upp2_data())
-        response = authenticated_client[0].post(reverse('company_new-list'), data=data, format='json')
+        response = authenticated_client.post(reverse('company_new-list'), data=data, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()
         assert response.content == b'{"password":["Password incorrect."]}'
@@ -31,14 +31,14 @@ class TestBusinessLogic:
         with open(r'C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\company\tests\Invalid_logo.jpg',
                   'rb') as f:
             read_data = f.read()
-        test_logo = SimpleUploadedFile(name='Invalid_logo.jpg',
-                                       content=read_data, content_type='image/jpeg')
+        test_logo = SimpleUploadedFile(name='Invalid_logo.jpg', content=read_data, content_type='image/jpeg')
         with pytest.raises(exceptions.ValidationError) as exc:
             validate_image_size(test_logo)
         assert f'Max file size is {str(MAX_IMAGE_SIZE)} MB' in str(exc.value)
         assert exc.type == exceptions.ValidationError
 
     def test_allowed_size_valid(self):
+        """ Another way to set 'absolute path'. Need for correct work 'pytest' command from Terminal."""
         file_path = str(settings.BASE_DIR) + r'\company\tests\Valid_logo.jpg'
         test_logo = SimpleUploadedFile(
             name='Valid_logo.jpg',
@@ -51,11 +51,11 @@ class TestBusinessLogic:
 class TestCreateCompanyView:
     def test_create_company_valid(self, authenticated_client_2_pass, randomizer):
         company_data = randomizer.company_data()
-        company_data.setdefault('password', authenticated_client_2_pass[2])
-        response = authenticated_client_2_pass[0].post(reverse('company_new-list'), data=company_data, format='json')
+        company_data.setdefault('password', authenticated_client_2_pass.user.user_password)
+        response = authenticated_client_2_pass.post(reverse('company_new-list'), data=company_data, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         assert response.json()
-        for_check_create_company = Company.objects.get(owner_id=authenticated_client_2_pass[0].user.id)
+        for_check_create_company = Company.objects.get(owner_id=authenticated_client_2_pass.user.id)
         assert for_check_create_company.legal_name == company_data['legal_name']
         # assert for_check_create_company.logo is None  # todo upload image
         assert for_check_create_company.legal_address_id is not None
@@ -79,12 +79,12 @@ class TestCreateCompanyView:
 
     def test_update_company_valid(self, authenticated_client_2_pass, randomizer, custom_company):
         data = randomizer.company_data()
-        data.setdefault('password', authenticated_client_2_pass[2])
-        url = reverse('company_new-detail', kwargs={'pk': custom_company[0].id})
-        response = authenticated_client_2_pass[0].put(url, data=data, format='json')
+        data.setdefault('password', authenticated_client_2_pass.user.user_password)
+        url = reverse('company_new-detail', kwargs={'pk': custom_company.id})
+        response = authenticated_client_2_pass.put(url, data=data, format='json')
         assert response.json()
         assert response.status_code == status.HTTP_200_OK
-        for_check_create_company = Company.objects.get(id=custom_company[0].id)
+        for_check_create_company = Company.objects.get(id=custom_company.id)
         assert for_check_create_company.legal_name == data['legal_name']
         # assert for_check_create_company.logo is None  # todo upload image
         assert for_check_create_company.legal_address_id is not None
@@ -106,21 +106,20 @@ class TestCreateCompanyView:
         assert for_check_create_actual_address.house_number == data['actual_address']['house_number']
         assert for_check_create_actual_address.flat_number == data['actual_address']['flat_number']
 
-    def test_update_another_user(self, authenticated_client, custom_company, randomizer):
-        company, password = custom_company
-        client = authenticated_client[0]
+    def test_update_another_client(self, authenticated_client, custom_company, randomizer):
         data = randomizer.company_data()
-        data.setdefault('password', password)
-        response = client.put(reverse('company_new-detail', kwargs={'pk': company.id}), data=data, format='json')
+        data.setdefault('password', custom_company.user_password)
+        url = reverse('company_new-detail', kwargs={'pk': custom_company.id})
+        response = authenticated_client.put(url, data=data, format='json')
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert response.json()
 
 
 class TestCompanyViewSet:
     def test_company_view_owner(self, authenticated_client_2_pass, custom_company):
-        response = authenticated_client_2_pass[0].get(reverse('company'), format='json')
+        response = authenticated_client_2_pass.get(reverse('company'), format='json')
         data = response.json()['results'][0]
-        for_check_create_company = Company.objects.get(id=custom_company[0].id)
+        for_check_create_company = Company.objects.get(id=custom_company.id)
         assert response.json()
         assert response.status_code == status.HTTP_200_OK
         assert for_check_create_company.owner_id == data['id']
@@ -132,7 +131,7 @@ class TestCompanyViewSet:
         assert for_check_create_company.email == data['email']
 
     def test_company_view_pk_anoter_user(self, authenticated_client, custom_company):
-        url = reverse('company_new-detail', kwargs={'pk': custom_company[0].id})
-        response = authenticated_client[0].get(url, format='json')
+        url = reverse('company_new-detail', kwargs={'pk': custom_company.id})
+        response = authenticated_client.get(url, format='json')
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert response.json()
