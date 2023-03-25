@@ -32,17 +32,17 @@ class CreateLocationSerializer(serializers.ModelSerializer):
         fields = ['id', 'owner', 'company', 'legal_name', 'logo', 'address', 'phone', 'email', 'password']
 
     def create(self, validated_data):
-        address = validated_data.pop('address')
+        address_dict = validated_data.pop('address')
         location = Location.objects.create(
-            address=Address.objects.create(**address),
+            address=Address.objects.create(**address_dict),
             **validated_data,
         )
         return location
 
     def update(self, instance, validated_data):
-        address = validated_data.pop('address')
+        address_dict = validated_data.pop('address')
         # rewrite the address separately by using 'Serializer'
-        instance.address = AddressSerializer().update(instance.address, address)
+        instance.address = AddressSerializer().update(instance.address, address_dict)
         return super().update(instance, validated_data)     # rewrite company by default method - 'update'
 
     def validate(self, attrs):  # take from request context users password and check in database

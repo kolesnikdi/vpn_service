@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from company.models import Company, Address
+from location.models import Location
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -9,12 +10,20 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = ['country', 'city', 'street', 'house_number', 'flat_number']
 
 
+class LoCoSerializer(serializers.ModelSerializer):  # todo make separate application for Address
+    address = AddressSerializer()
+
+    class Meta:
+        model = Location
+        fields = ['company', 'id', 'legal_name', 'logo', 'address', 'phone', 'email']
+
+
 class CompanySerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.email')  # change visible info from owner_id to owner_email
     actual_address = AddressSerializer()
     legal_address = AddressSerializer()
-    location = serializers.StringRelatedField(many=True)    # TODO delete when new application Address will be
-    # location = LocationSerializer()       # TODO activate when new application Address will be
+    # location = serializers.StringRelatedField(many=True)    # TODO delete when new application Address will be
+    location = LoCoSerializer(many=True)       # TODO activate when new application Address will be
 
     class Meta:
         # ordering = ['-id']  # Need to improve UnorderedObjectListWarning:

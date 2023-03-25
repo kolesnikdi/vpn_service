@@ -15,12 +15,13 @@ class TestValidatePassword:
 
     def test_passwords_incorrect(self, authenticated_client, randomizer):
         data = randomizer.company_data()
-        data.setdefault('password', randomizer.upp2_data())
+        data['password'] = randomizer.upp2_data()   # or         data.setdefault('password', randomizer.upp2_data())
         response = authenticated_client.post(reverse('company_new-list'), data=data, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()
+        response_json = response.json()
+        assert response_json
         assert response.content == b'{"password":["Password incorrect."]}'
-        assert response.json()['password'] == ['Password incorrect.']
+        assert response_json['password'] == ['Password incorrect.']
 
 
 class TestBusinessLogic:
@@ -51,7 +52,7 @@ class TestBusinessLogic:
 class TestCreateCompanyView:
     def test_create_company_valid(self, authenticated_client_2_pass, randomizer):
         company_data = randomizer.company_data()
-        company_data.setdefault('password', authenticated_client_2_pass.user.user_password)
+        company_data['password'] = authenticated_client_2_pass.user.user_password
         response = authenticated_client_2_pass.post(reverse('company_new-list'), data=company_data, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         assert response.json()
@@ -79,7 +80,7 @@ class TestCreateCompanyView:
 
     def test_update_company_valid(self, authenticated_client_2_pass, randomizer, custom_company):
         data = randomizer.company_data()
-        data.setdefault('password', authenticated_client_2_pass.user.user_password)
+        data['password'] = authenticated_client_2_pass.user.user_password
         url = reverse('company_new-detail', kwargs={'pk': custom_company.id})
         response = authenticated_client_2_pass.put(url, data=data, format='json')
         assert response.json()
@@ -108,7 +109,7 @@ class TestCreateCompanyView:
 
     def test_update_another_client(self, authenticated_client, custom_company, randomizer):
         data = randomizer.company_data()
-        data.setdefault('password', custom_company.user_password)
+        data['password'] = custom_company.user_password
         url = reverse('company_new-detail', kwargs={'pk': custom_company.id})
         response = authenticated_client.put(url, data=data, format='json')
         assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -118,18 +119,17 @@ class TestCreateCompanyView:
 class TestCompanyViewSet:
     def test_company_view_owner(self, authenticated_client_2_pass, custom_company):
         response = authenticated_client_2_pass.get(reverse('company'), format='json')
-        data = response.json()['results'][0]
-        for_check_create_company = Company.objects.get(id=custom_company.id)
-        assert response.json()
+        response_json = response.json()
+        data = response_json['results'][0]
+        assert response_json
         assert response.status_code == status.HTTP_200_OK
-        assert for_check_create_company.owner_id == data['id']
-        assert for_check_create_company.legal_name == data['legal_name']
-        assert for_check_create_company.legal_address
-        assert for_check_create_company.actual_address_id is not None
-        assert for_check_create_company.code_USREOU == data['code_USREOU']
-        assert for_check_create_company.phone == data['phone']
-        assert for_check_create_company.email == data['email']
-
+        assert custom_company.owner_id == data['id']
+        assert custom_company.legal_name == data['legal_name']
+        assert custom_company.legal_address
+        assert custom_company.actual_address_id is not None
+        assert custom_company.code_USREOU == data['code_USREOU']
+        assert custom_company.phone == data['phone']
+        assert custom_company.email == data['email']
 
     def test_company_view_pk_anoter_user(self, authenticated_client, custom_company):
         url = reverse('company_new-detail', kwargs={'pk': custom_company.id})

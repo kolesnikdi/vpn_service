@@ -10,20 +10,20 @@ class TestValidateCompany:
 
     def test_passwords_incorrect(self, custom_company, randomizer):
         data = randomizer.location_data()
-        data.setdefault('password', custom_company.user_password)
-        data.setdefault('company', custom_company.id+10)
+        data['password'] = custom_company.user_password
+        data['company'] = custom_company.id+10
         response = custom_company.user.post(reverse('location_new-list'), data=data, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()
-        assert response.content == b'{"company":["Invalid pk \\"11\\" - object does not exist."]}'
-        assert response.json()['company'] == ['Invalid pk "11" - object does not exist.']
+        response_json = response.json()
+        assert response_json
+        assert response_json['company'] == ['Invalid pk "11" - object does not exist.']
 
 
 class TestCreateLocationView:
     def test_create_location_valid(self, custom_company, randomizer):
         data = randomizer.location_data()
-        data.setdefault('password', custom_company.user_password)
-        data.setdefault('company', custom_company.id)
+        data['password'] = custom_company.user_password
+        data['company'] = custom_company.id
         response = custom_company.user.post(reverse('location_new-list'), data=data, format='json')
         assert response.json()
         assert response.status_code == status.HTTP_201_CREATED
@@ -43,8 +43,8 @@ class TestCreateLocationView:
 
     def test_update_location_valid(self, randomizer, custom_company, custom_location):
         data = randomizer.location_data()
-        data.setdefault('password', custom_company.user_password)
-        data.setdefault('company', custom_company.id)
+        data['password'] = custom_company.user_password
+        data['company'] = custom_company.id
         url = reverse('location_new-detail', kwargs={'pk': custom_location.id})
         response = custom_company.user.put(url, data=data, format='json')
         assert response.json()
@@ -85,15 +85,15 @@ class TestCreateLocationView:
 class TestLocationViewSet:
     def test_location_view_owner(self, authenticated_client_2_pass, custom_location):
         response = authenticated_client_2_pass.get(reverse('location'), format='json')
-        data = response.json()['results'][0]
-        for_check_location = Location.objects.get(id=custom_location.id)
-        assert response.json()
+        response_json = response.json()
+        assert response_json
+        data = response_json['results'][0]
         assert response.status_code == status.HTTP_200_OK
-        assert for_check_location.company_id == data['company']
-        assert for_check_location.legal_name == data['legal_name']
-        assert for_check_location.address is not None
-        assert for_check_location.phone == data['phone']
-        assert for_check_location.email == data['email']
+        assert custom_location.company_id == data['company']
+        assert custom_location.legal_name == data['legal_name']
+        assert custom_location.address is not None
+        assert custom_location.phone == data['phone']
+        assert custom_location.email == data['email']
 
     def test_location_view_pk_anoter_user(self, authenticated_client, custom_location):
         url = reverse('location_new-detail', kwargs={'pk': custom_location.id})
