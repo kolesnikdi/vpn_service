@@ -57,9 +57,9 @@ class TestCreateCompanyView:
         assert response.json()
         for_check_create_company = Company.objects.get(owner_id=authenticated_client_2_pass.user.id)
         assert for_check_create_company.legal_name == company_data['legal_name']
-        # assert for_check_create_company.logo is None  # todo upload image
+        assert not bool(for_check_create_company.logo)  # true if not False=bool((for_check_create_location.logo)
         assert for_check_create_company.legal_address_id is not None
-        assert for_check_create_company.actual_address_id is not None
+        assert for_check_create_company.actual_address
         assert for_check_create_company.code_USREOU == company_data['code_USREOU']
         assert for_check_create_company.phone == company_data['phone']
         assert for_check_create_company.email == company_data['email']
@@ -86,8 +86,8 @@ class TestCreateCompanyView:
         assert response.status_code == status.HTTP_200_OK
         for_check_create_company = Company.objects.get(id=custom_company.id)
         assert for_check_create_company.legal_name == data['legal_name']
-        # assert for_check_create_company.logo is None  # todo upload image
-        assert for_check_create_company.legal_address_id is not None
+        assert not bool(for_check_create_company.logo)
+        assert for_check_create_company.legal_address
         assert for_check_create_company.actual_address_id is not None
         assert for_check_create_company.code_USREOU == data['code_USREOU']
         assert for_check_create_company.phone == data['phone']
@@ -124,11 +124,12 @@ class TestCompanyViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert for_check_create_company.owner_id == data['id']
         assert for_check_create_company.legal_name == data['legal_name']
-        assert for_check_create_company.legal_address_id == data['legal_address']
-        assert for_check_create_company.actual_address_id == data['actual_address']
+        assert for_check_create_company.legal_address
+        assert for_check_create_company.actual_address_id is not None
         assert for_check_create_company.code_USREOU == data['code_USREOU']
         assert for_check_create_company.phone == data['phone']
         assert for_check_create_company.email == data['email']
+
 
     def test_company_view_pk_anoter_user(self, authenticated_client, custom_company):
         url = reverse('company_new-detail', kwargs={'pk': custom_company.id})

@@ -31,19 +31,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # libraries
     'rest_framework',
     'phonenumber_field',
     'knox',
+
     # applications
-    # 'client',
     'company',
-    # 'location',
+    'location',
+    'registration',
+
+    # 'client',
     # 'manager',
     # 'menu',
     # 'owner',
     # 'product',
-    'registration',
+
 ]
 
 AUTH_USER_MODEL = 'registration.WebMenuUser'
