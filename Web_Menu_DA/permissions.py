@@ -12,6 +12,11 @@ class IsOwnerOr404(permissions.BasePermission):
                 return True
             else:
                 raise exceptions.NotFound()
+        elif hasattr(obj, 'company'):   # add new check if no user in request
+            if obj.company.owner == request.user:   # check if company.owner == user
+                return True
+            else:
+                raise exceptions.NotFound()
         return True
 
 

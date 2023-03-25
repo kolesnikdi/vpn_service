@@ -9,6 +9,7 @@ from knox.models import AuthToken
 from rest_framework.test import APIClient
 
 from company.models import Company, Address
+from location.models import Location
 from registration.models import RegistrationTry
 
 """randomizers"""
@@ -80,6 +81,20 @@ class Randomizer:
                                'house_number': self.random_digits(),
                                'flat_number': self.random_digits()},
             'code_USREOU': self.random_digits(),
+            'phone': self.random_phone(),
+            'email': self.email(),
+        }
+        return data
+
+    def location_data(self):
+        data = {
+            'legal_name': self.random_name(),
+            'logo': None,  # todo upload image
+            'address': {'country': self.random_name(),
+                        'city': self.random_name(),
+                        'street': self.random_name(),
+                        'house_number': self.random_digits(),
+                        'flat_number': self.random_digits()},
             'phone': self.random_phone(),
             'email': self.email(),
         }
@@ -177,4 +192,19 @@ def custom_company(authenticated_client_2_pass, randomizer):
         email=company_data['email']
     )
     company.user_password = authenticated_client_2_pass.user.user_password
+    company.user = authenticated_client_2_pass
     return company
+
+@pytest.fixture(scope='function')
+def custom_location(randomizer, custom_company):
+    data = randomizer.location_data()
+    location = Location.objects.create(
+        company=custom_company,
+        legal_name=data['legal_name'],
+        address=Address.objects.create(**data['address']),
+        phone=data['phone'],
+        email=data['email']
+    )
+    location.user_password = custom_company.user_password
+    location.company_id = custom_company.id
+    return location

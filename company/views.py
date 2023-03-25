@@ -12,14 +12,17 @@ class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
 
     def get_queryset(self):
-        return self.request.user.company.all()
+        # add .order_by('id') to improve UnorderedObjectListWarning: Pagination may yield inconsistent results with
+        # an unordered object_list
+        return self.request.user.company.all().order_by('id')
 
 
 class CreateCompanyView(viewsets.ModelViewSet):
     serializer_class = CreateCompanySerializer
     permission_classes = [IsAuthenticated, IsOwnerOr404]
-    queryset = Company.objects.all().order_by('id')     # add .order_by('id') to improve UnorderedObjectListWarning:
-                                            # Pagination may yield inconsistent results with an unordered object_list
+    # add .order_by('id') to improve UnorderedObjectListWarning: Pagination may yield inconsistent results with
+    # an unordered object_list
+    queryset = Company.objects.all().order_by('id')
 
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -38,5 +41,5 @@ class CreateCompanyView(viewsets.ModelViewSet):
     #     return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        """signs the post by name of user. Signs the post by current time"""
+        """signs the post by name of user."""
         serializer.save(owner=self.request.user)

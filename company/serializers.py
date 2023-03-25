@@ -1,22 +1,36 @@
 from rest_framework import serializers
 
 from company.models import Company, Address
-
-
-class CompanySerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.email')
-
-    # location = serializers.PrimaryKeyRelatedField(many=True, queryset=location.objects.all()) # todo activate when locations will be
-    class Meta:
-        model = Company
-        fields = ['owner', 'id', 'legal_name', 'legal_address', 'actual_address', 'code_USREOU', 'phone',
-                  'email']  # todo add , 'location' when locations will be
+from location.models import Location
 
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ['country', 'city', 'street', 'house_number', 'flat_number']
+
+
+class LoCoSerializer(serializers.ModelSerializer):  # todo make separate application for Address
+    address = AddressSerializer()
+
+    class Meta:
+        model = Location
+        fields = ['company', 'id', 'legal_name', 'logo', 'address', 'phone', 'email']
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.email')  # change visible info from owner_id to owner_email
+    actual_address = AddressSerializer()
+    legal_address = AddressSerializer()
+    # location = serializers.StringRelatedField(many=True)    # TODO delete when new application Address will be
+    location = LoCoSerializer(many=True)       # TODO activate when new application Address will be
+
+    class Meta:
+        # ordering = ['-id']  # Need to improve UnorderedObjectListWarning:
+        # Pagination may yield inconsistent results with an unordered object_list
+        model = Company
+        fields = ['owner', 'id', 'legal_name', 'logo', 'legal_address', 'actual_address', 'code_USREOU', 'phone',
+                  'email', 'location']  # todo add , 'location' when locations will be
 
 
 class CreateCompanySerializer(serializers.ModelSerializer):
@@ -46,7 +60,7 @@ class CreateCompanySerializer(serializers.ModelSerializer):
         # rewrite the address separately by using 'Serializer'
         instance.legal_address = AddressSerializer().update(instance.legal_address, legal_address)
         instance.actual_address = AddressSerializer().update(instance.actual_address, actual_address)
-        return super().update(instance, validated_data)     # rewrite company by default method - 'update'
+        return super().update(instance, validated_data)  # rewrite company by default method - 'update'
 
     def validate(self, attrs):  # take from request context users password and check in database
         if user := self.context.get('user'):

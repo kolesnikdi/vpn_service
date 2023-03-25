@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import gettext_lazy
 from django.core.validators import MinLengthValidator, integer_validator
 
 from phonenumber_field.modelfields import PhoneNumberField
 from company.business_logic import user_directory_path, validate_image_size
+
+# class Logo(models.Model): # todo make separate application for Image
+# logo = models.ForeignKey(Logo, null=True, on_delete=models.CASCADE)   # todo move request to Company
 
 
 class Company(models.Model):
@@ -14,13 +16,13 @@ class Company(models.Model):
     logo = models.ImageField(upload_to=user_directory_path, height_field='url_height', width_field='url_width',
                              blank=True, null=True, validators=[validate_image_size])
     legal_name = models.CharField('legal_name', max_length=50, unique=True)
-    legal_address = models.ForeignKey('company.Address', related_name='legal_company', on_delete=models.DO_NOTHING)
-    actual_address = models.ForeignKey('company.Address', related_name='actual_company', on_delete=models.DO_NOTHING)
+    legal_address = models.ForeignKey('company.Address', related_name='legal_address', on_delete=models.DO_NOTHING)
+    actual_address = models.ForeignKey('company.Address', related_name='actual_address', on_delete=models.DO_NOTHING)
     code_USREOU = models.CharField('code USREOU', validators=[MinLengthValidator(8), integer_validator], max_length=10
                                    , unique=True)
     phone = PhoneNumberField(region='UA', max_length=13, unique=True, db_index=True,
                              error_messages={'unique': 'Not a valid mobile phone. Enter again and correctly.'})
-    email = models.EmailField(gettext_lazy('email address'), unique=True, db_index=True, max_length=50,
+    email = models.EmailField(verbose_name='email address', unique=True, db_index=True, max_length=50,
                               error_messages={'unique': 'Not a valid email. Enter again and correctly.'})
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -28,7 +30,7 @@ class Company(models.Model):
         return self.legal_name
 
 
-class Address(models.Model):
+class Address(models.Model):    # todo make separate application for Address
     country = models.CharField('legal country', max_length=30)
     city = models.CharField('legal city', max_length=30)
     street = models.CharField('legal street', max_length=50)
