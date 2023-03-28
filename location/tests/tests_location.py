@@ -2,7 +2,7 @@ from django.urls import reverse
 
 from rest_framework import status
 
-from company.models import Address
+from address.models import Address
 from location.models import Location
 
 
@@ -70,7 +70,7 @@ class TestCreateLocationView:
 
     def test_delete_location_another_client(self, authenticated_client, custom_location):
         response = authenticated_client.delete(reverse('location_new-detail', kwargs={'pk': custom_location.id}))
-        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_update_location_another_client(self, authenticated_client, custom_location, randomizer):
         data = randomizer.location_data()

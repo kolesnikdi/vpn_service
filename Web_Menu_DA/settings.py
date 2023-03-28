@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'company',
     'location',
     'registration',
+    'address',
 
     # 'client',
     # 'manager',

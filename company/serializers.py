@@ -1,36 +1,23 @@
 from rest_framework import serializers
 
-from company.models import Company, Address
-from location.models import Location
-
-
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields = ['country', 'city', 'street', 'house_number', 'flat_number']
-
-
-class LoCoSerializer(serializers.ModelSerializer):  # todo make separate application for Address
-    address = AddressSerializer()
-
-    class Meta:
-        model = Location
-        fields = ['company', 'id', 'legal_name', 'logo', 'address', 'phone', 'email']
+from company.models import Company
+from address.models import Address
+from address.serializers import AddressSerializer
+from location.serializers import LocationSerializer
 
 
 class CompanySerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.email')  # change visible info from owner_id to owner_email
     actual_address = AddressSerializer()
     legal_address = AddressSerializer()
-    # location = serializers.StringRelatedField(many=True)    # TODO delete when new application Address will be
-    location = LoCoSerializer(many=True)       # TODO activate when new application Address will be
+    location = LocationSerializer(many=True)
 
     class Meta:
         # ordering = ['-id']  # Need to improve UnorderedObjectListWarning:
         # Pagination may yield inconsistent results with an unordered object_list
         model = Company
         fields = ['owner', 'id', 'legal_name', 'logo', 'legal_address', 'actual_address', 'code_USREOU', 'phone',
-                  'email', 'location']  # todo add , 'location' when locations will be
+                  'email', 'location']
 
 
 class CreateCompanySerializer(serializers.ModelSerializer):
