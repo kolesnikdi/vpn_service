@@ -1,11 +1,13 @@
 from rest_framework import serializers, exceptions
 
-from company.models import Address, Company
-from company.serializers import AddressSerializer
+from company.models import Company
+from address.models import Address
+
+from address.serializers import AddressSerializer
 from location.models import Location
 
 
-class LocationSerializer(serializers.ModelSerializer):  # todo make separate application for Address
+class LocationSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     # manager = serializers.ReadOnlyField(source='manager.email')   # todo activate when manager will be
 

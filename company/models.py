@@ -16,8 +16,8 @@ class Company(models.Model):
     logo = models.ImageField(upload_to=user_directory_path, height_field='url_height', width_field='url_width',
                              blank=True, null=True, validators=[validate_image_size])
     legal_name = models.CharField('legal_name', max_length=50, unique=True)
-    legal_address = models.ForeignKey('company.Address', related_name='legal_address', on_delete=models.DO_NOTHING)
-    actual_address = models.ForeignKey('company.Address', related_name='actual_address', on_delete=models.DO_NOTHING)
+    legal_address = models.ForeignKey('address.Address', related_name='legal_address', on_delete=models.CASCADE)
+    actual_address = models.ForeignKey('address.Address', related_name='actual_address', on_delete=models.CASCADE)
     code_USREOU = models.CharField('code USREOU', validators=[MinLengthValidator(8), integer_validator], max_length=10
                                    , unique=True)
     phone = PhoneNumberField(region='UA', max_length=13, unique=True, db_index=True,
@@ -28,11 +28,3 @@ class Company(models.Model):
 
     def __str__(self):
         return self.legal_name
-
-
-class Address(models.Model):    # todo make separate application for Address
-    country = models.CharField('legal country', max_length=30)
-    city = models.CharField('legal city', max_length=30)
-    street = models.CharField('legal street', max_length=50)
-    house_number = models.CharField('legal house number', max_length=10)
-    flat_number = models.CharField('legal flat number', max_length=10)

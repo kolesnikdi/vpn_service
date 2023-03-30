@@ -8,7 +8,8 @@ from django.urls import reverse
 from knox.models import AuthToken
 from rest_framework.test import APIClient
 
-from company.models import Company, Address
+from company.models import Company
+from address.models import Address
 from location.models import Location
 from registration.models import RegistrationTry
 

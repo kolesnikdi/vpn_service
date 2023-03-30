@@ -8,7 +8,9 @@ from rest_framework import status
 from django.core import exceptions
 
 from company.business_logic import validate_image_size, MAX_IMAGE_SIZE
-from company.models import Company, Address
+from company.models import Company
+from address.models import Address
+
 
 
 class TestValidatePassword:

@@ -13,7 +13,7 @@ class Location(models.Model):
     logo = models.ImageField(upload_to=user_directory_path, height_field='url_height', width_field='url_width',
                              blank=True, null=True, validators=[validate_image_size])
     legal_name = models.CharField('legal_name', max_length=50, unique=True)
-    address = models.ForeignKey('company.Address', related_name='address', on_delete=models.CASCADE)
+    address = models.ForeignKey('address.Address', related_name='address', on_delete=models.CASCADE)
     phone = PhoneNumberField(region='UA', max_length=13, unique=True, db_index=True,
                              error_messages={'unique': 'Not a valid mobile phone. Enter again and correctly.'})
     email = models.EmailField(verbose_name='email address', db_index=True, max_length=50)
