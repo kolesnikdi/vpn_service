@@ -27,23 +27,5 @@ class Migration(migrations.Migration):
                     flat_number
                 FROM
                     company_address;
-            """, reverse_sql="""
-                INSERT INTO company_address (
-                    id,
-                    country,
-                    city,
-                    street,
-                    house_number,
-                    flat_number
-                )
-                SELECT
-                    id,
-                    country,
-                    city,
-                    street,
-                    house_number,
-                    flat_number
-                FROM
-                    address_address;
             """)
     ]

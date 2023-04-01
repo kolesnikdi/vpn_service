@@ -3,18 +3,11 @@ from django.utils import timezone
 from django.core.validators import MinLengthValidator, integer_validator
 
 from phonenumber_field.modelfields import PhoneNumberField
-from company.business_logic import user_directory_path, validate_image_size
-
-# class Logo(models.Model): # todo make separate application for Image
-# logo = models.ForeignKey(Logo, null=True, on_delete=models.CASCADE)   # todo move request to Company
 
 
 class Company(models.Model):
     owner = models.ForeignKey('registration.WebMenuUser', related_name='company', on_delete=models.DO_NOTHING)
-    url_height = models.PositiveIntegerField(blank=True, null=True)
-    url_width = models.PositiveIntegerField(blank=True, null=True)
-    logo = models.ImageField(upload_to=user_directory_path, height_field='url_height', width_field='url_width',
-                             blank=True, null=True, validators=[validate_image_size])
+    logo = models.OneToOneField('image.Image', related_name='company_logo', null=True, on_delete=models.CASCADE)
     legal_name = models.CharField('legal_name', max_length=50, unique=True)
     legal_address = models.ForeignKey('address.Address', related_name='legal_address', on_delete=models.CASCADE)
     actual_address = models.ForeignKey('address.Address', related_name='actual_address', on_delete=models.CASCADE)

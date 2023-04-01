@@ -2,16 +2,12 @@ from django.db import models
 from django.utils import timezone
 
 from phonenumber_field.modelfields import PhoneNumberField
-from location.business_logic import user_directory_path, validate_image_size
 
 
 class Location(models.Model):
-    company = models.ForeignKey('company.Company', related_name='location', on_delete=models.DO_NOTHING)
+    company = models.ForeignKey('company.Company', related_name='location', on_delete=models.CASCADE)
     # manager = models.ForeignKey('company.WebMenuUser', related_name='company', on_delete=models.DO_NOTHING)   # todo activate when manager will be
-    url_height = models.PositiveIntegerField(blank=True, null=True)
-    url_width = models.PositiveIntegerField(blank=True, null=True)
-    logo = models.ImageField(upload_to=user_directory_path, height_field='url_height', width_field='url_width',
-                             blank=True, null=True, validators=[validate_image_size])
+    logo = models.OneToOneField('image.Image', related_name='location_logo', null=True, on_delete=models.CASCADE)
     legal_name = models.CharField('legal_name', max_length=50, unique=True)
     address = models.ForeignKey('address.Address', related_name='address', on_delete=models.CASCADE)
     phone = PhoneNumberField(region='UA', max_length=13, unique=True, db_index=True,
