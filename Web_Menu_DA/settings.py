@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'location',
     'registration',
     'address',
+    'image',
 
     # 'client',
     # 'manager',

@@ -11,7 +11,7 @@ class TestValidateCompany:
     def test_passwords_incorrect(self, custom_company, randomizer):
         data = randomizer.location_data()
         data['password'] = custom_company.user_password
-        data['company'] = custom_company.id+10
+        data['company'] = custom_company.id + 10
         response = custom_company.user.post(reverse('location_new-list'), data=data, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         response_json = response.json()
@@ -29,7 +29,7 @@ class TestCreateLocationView:
         assert response.status_code == status.HTTP_201_CREATED
         for_check_create_location = Location.objects.get(company_id=custom_company.id)
         assert for_check_create_location.legal_name == data['legal_name']
-        assert not bool(for_check_create_location.logo)  # true if not False=bool((for_check_create_location.logo)
+        assert not bool(for_check_create_location.logo.image)  # true if not False=bool((for_check_create_location.logo)
         assert for_check_create_location.address_id is not None
         assert for_check_create_location.phone == data['phone']
         assert for_check_create_location.email == data['email']
@@ -51,8 +51,8 @@ class TestCreateLocationView:
         assert response.status_code == status.HTTP_200_OK
         for_check_update_location = Location.objects.get(id=custom_location.id)
         assert for_check_update_location.legal_name == data['legal_name']
-        assert not bool(for_check_update_location.logo)
-        assert for_check_update_location.address    # true if address exist
+        assert not bool(for_check_update_location.logo.image)
+        assert for_check_update_location.address  # true if address exist
         assert for_check_update_location.address_id is not None
         assert for_check_update_location.phone == data['phone']
         assert for_check_update_location.email == data['email']

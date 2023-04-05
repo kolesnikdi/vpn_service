@@ -10,6 +10,7 @@ from rest_framework.test import APIClient
 
 from company.models import Company
 from address.models import Address
+from image.models import Image
 from location.models import Location
 from registration.models import RegistrationTry
 
@@ -70,7 +71,7 @@ class Randomizer:
     def company_data(self):
         data = {
             'legal_name': self.random_name(),
-            'logo': None,  # todo upload image
+            'logo': {'image': None},  # todo upload image
             'legal_address': {'country': self.random_name(),
                               'city': self.random_name(),
                               'street': self.random_name(),
@@ -90,7 +91,7 @@ class Randomizer:
     def location_data(self):
         data = {
             'legal_name': self.random_name(),
-            'logo': None,  # todo upload image
+            'logo': {'image': None},  # todo upload image
             'address': {'country': self.random_name(),
                         'city': self.random_name(),
                         'street': self.random_name(),
@@ -185,6 +186,7 @@ def custom_company(authenticated_client_2_pass, randomizer):
     company_data = randomizer.company_data()
     company = Company.objects.create(
         owner=authenticated_client_2_pass.user,
+        logo=Image.objects.create(**company_data['logo']),
         legal_name=company_data['legal_name'],
         legal_address=Address.objects.create(**company_data['legal_address']),
         actual_address=Address.objects.create(**company_data['actual_address']),
@@ -201,6 +203,7 @@ def custom_location(randomizer, custom_company):
     data = randomizer.location_data()
     location = Location.objects.create(
         company=custom_company,
+        logo=Image.objects.create(**data['logo']),
         legal_name=data['legal_name'],
         address=Address.objects.create(**data['address']),
         phone=data['phone'],

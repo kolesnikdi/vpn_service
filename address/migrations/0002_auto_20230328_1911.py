@@ -5,6 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
+        ('company', '0004_alter_company_actual_address_and_more'),
         ('address', '0001_initial'),
     ]
 
@@ -27,23 +28,5 @@ class Migration(migrations.Migration):
                     flat_number
                 FROM
                     company_address;
-            """, reverse_sql="""
-                INSERT INTO company_address (
-                    id,
-                    country,
-                    city,
-                    street,
-                    house_number,
-                    flat_number
-                )
-                SELECT
-                    id,
-                    country,
-                    city,
-                    street,
-                    house_number,
-                    flat_number
-                FROM
-                    address_address;
             """)
     ]

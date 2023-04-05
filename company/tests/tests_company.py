@@ -12,12 +12,11 @@ from company.models import Company
 from address.models import Address
 
 
-
 class TestValidatePassword:
 
     def test_passwords_incorrect(self, authenticated_client, randomizer):
         data = randomizer.company_data()
-        data['password'] = randomizer.upp2_data()   # or         data.setdefault('password', randomizer.upp2_data())
+        data['password'] = randomizer.upp2_data()  # or         data.setdefault('password', randomizer.upp2_data())
         response = authenticated_client.post(reverse('company_new-list'), data=data, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         response_json = response.json()
@@ -37,7 +36,7 @@ class TestBusinessLogic:
         test_logo = SimpleUploadedFile(name='Invalid_logo.jpg', content=read_data, content_type='image/jpeg')
         with pytest.raises(exceptions.ValidationError) as exc:
             validate_image_size(test_logo)
-        assert f'Max file size is {str(MAX_IMAGE_SIZE)} MB' in str(exc.value)
+        assert f'Max file size is {str(MAX_IMAGE_SIZE)} KB' in str(exc.value)
         assert exc.type == exceptions.ValidationError
 
     def test_allowed_size_valid(self):
@@ -56,11 +55,11 @@ class TestCreateCompanyView:
         company_data = randomizer.company_data()
         company_data['password'] = authenticated_client_2_pass.user.user_password
         response = authenticated_client_2_pass.post(reverse('company_new-list'), data=company_data, format='json')
-        assert response.status_code == status.HTTP_201_CREATED
         assert response.json()
+        assert response.status_code == status.HTTP_201_CREATED
         for_check_create_company = Company.objects.get(owner_id=authenticated_client_2_pass.user.id)
         assert for_check_create_company.legal_name == company_data['legal_name']
-        assert not bool(for_check_create_company.logo)  # true if not False=bool((for_check_create_location.logo)
+        assert not bool(for_check_create_company.logo.image)  # true if not False=bool((for_check_create_location.logo)
         assert for_check_create_company.legal_address_id is not None
         assert for_check_create_company.actual_address
         assert for_check_create_company.code_USREOU == company_data['code_USREOU']
@@ -89,7 +88,7 @@ class TestCreateCompanyView:
         assert response.status_code == status.HTTP_200_OK
         for_check_create_company = Company.objects.get(id=custom_company.id)
         assert for_check_create_company.legal_name == data['legal_name']
-        assert not bool(for_check_create_company.logo)
+        assert not bool(for_check_create_company.logo.image)
         assert for_check_create_company.legal_address
         assert for_check_create_company.actual_address_id is not None
         assert for_check_create_company.code_USREOU == data['code_USREOU']
