@@ -5,6 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
+        ('company', '0004_alter_company_actual_address_and_more'),
         ('address', '0001_initial'),
     ]
 

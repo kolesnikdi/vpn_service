@@ -37,7 +37,7 @@ class CreateCompanySerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.email')
     legal_address = AddressSerializer()
     actual_address = AddressSerializer()
-    logo = ImageSerializer(required=False)
+    logo = ImageSerializer()
 
     class Meta:
         model = Company
@@ -48,19 +48,14 @@ class CreateCompanySerializer(serializers.ModelSerializer):
         legal_address_data = validated_data.pop('legal_address')
         actual_address_data = validated_data.pop('actual_address')
         logo_data = validated_data.pop('logo')
-        company = Company.objects.create(
-            legal_address=Address.objects.create(**legal_address_data),
-            actual_address=Address.objects.create(**actual_address_data),
-            **validated_data,
-        )
         with transaction.atomic():  # atomic should stop other requests to db until we make the changes
-            """ Works only with custom ImageSerializer. 
-            Does not work directly through the serializers.ImageField.
-            Must be created only after company.create - because we need company.id.exist
-            to transfer to company_logo"""
-            Image.objects.create(
-                company_logo=company,
-                **logo_data,
+            """ Works only with custom ImageSerializer.
+            Does not work directly through the serializers.ImageField."""
+            company = Company.objects.create(
+                legal_address=Address.objects.create(**legal_address_data),
+                actual_address=Address.objects.create(**actual_address_data),
+                logo=Image.objects.create(**logo_data),
+                **validated_data,
             )
         return company
 

@@ -9,7 +9,7 @@ from location.models import Location
 def copy_images_ids(apps, schema):
     CHUNK_SIZE = 3
 
-    company_images = Image.objects.filter(company_id__isnull=False).select_related('company')
+    company_images = Image.objects.filter(company_logo__isnull=False).select_related('company')
 
     for img_qs in custom_queryset_iterator(company_images, CHUNK_SIZE):
         companies_to_update = []
@@ -18,7 +18,7 @@ def copy_images_ids(apps, schema):
             companies_to_update.append(img.company)
         Company.objects.bulk_update(companies_to_update, ['logo_id'])
 
-    location_images = Image.objects.filter(location_id__isnull=False).select_related('location')
+    location_images = Image.objects.filter(location_logo__isnull=False).select_related('location')
 
     for img_qs in custom_queryset_iterator(location_images, CHUNK_SIZE):
         locations_to_update = []

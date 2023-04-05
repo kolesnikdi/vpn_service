@@ -23,7 +23,4 @@ class Migration(migrations.Migration):
             name='legal_address',
             field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='legal_address', to='address.address'),
         ),
-        migrations.DeleteModel(
-            name='Address',
-        ),
     ]

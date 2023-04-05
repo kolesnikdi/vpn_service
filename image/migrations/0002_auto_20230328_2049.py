@@ -3,6 +3,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
+        ('company', '0005_alter_company_actual_address_and_more'),
         ('image', '0001_initial'),
     ]
 

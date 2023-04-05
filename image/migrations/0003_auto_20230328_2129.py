@@ -3,6 +3,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('location', '0005_alter_location_address'),
         ('image', '0002_auto_20230328_2049'),
     ]
 
