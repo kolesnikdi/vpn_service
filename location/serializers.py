@@ -48,11 +48,10 @@ class CreateLocationSerializer(serializers.ModelSerializer):
         fields = ['id', 'owner', 'company', 'legal_name', 'logo', 'address', 'phone', 'email', 'password']
 
     def create(self, validated_data):
-        address_dict = validated_data.pop('address')
-        logo_dict = validated_data.pop('logo')
-        with transaction.atomic():  # atomic should stop other requests to db until we make the changes
-            """ Works only with custom ImageSerializer. 
-            Does not work directly through the serializers.ImageField."""
+        address_dict = validated_data.pop('address')  # data from custom serializer
+        logo_dict = validated_data.pop('logo')  # data from custom serializer
+        with transaction.atomic():
+            # atomic should stop other requests to db until we make the changes
             location = Location.objects.create(
                 address=Address.objects.create(**address_dict),
                 logo=Image.objects.create(**logo_dict),

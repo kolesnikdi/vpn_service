@@ -45,12 +45,11 @@ class CreateCompanySerializer(serializers.ModelSerializer):
                   'email', 'password']
 
     def create(self, validated_data):
-        legal_address_data = validated_data.pop('legal_address')
-        actual_address_data = validated_data.pop('actual_address')
-        logo_data = validated_data.pop('logo')
-        with transaction.atomic():  # atomic should stop other requests to db until we make the changes
-            """ Works only with custom ImageSerializer.
-            Does not work directly through the serializers.ImageField."""
+        legal_address_data = validated_data.pop('legal_address')  # data from custom serializer
+        actual_address_data = validated_data.pop('actual_address')  # data from custom serializer
+        logo_data = validated_data.pop('logo')  # data from custom serializer
+        with transaction.atomic():
+            # atomic should stop other requests to db until we make the changes
             company = Company.objects.create(
                 legal_address=Address.objects.create(**legal_address_data),
                 actual_address=Address.objects.create(**actual_address_data),
