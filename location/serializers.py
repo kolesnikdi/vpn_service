@@ -63,10 +63,10 @@ class CreateLocationSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         address_dict = validated_data.pop('address')
         logo_dict = validated_data.pop('logo')
-        # rewrite the address separately by using 'Serializer'
+        # make address and logo object separately by using custom 'Serializer'
         instance.address = AddressSerializer().update(instance.address, address_dict)
         instance.logo = ImageSerializer().update(instance.logo, logo_dict)
-        return super().update(instance, validated_data)  # rewrite company by default method - 'update'
+        return super().update(instance, validated_data)  # using default method - 'update' for company
 
     def validate(self, attrs):  # take from request context users password and check in database
         if user := self.context.get('user'):

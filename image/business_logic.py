@@ -1,6 +1,6 @@
-"""Path to upload image for different apps request"""
 def user_directory_path(instance, filename):
-    """import inside to improve a circular import
+    """Path to upload image for different apps request.
+    Import inside to improve a circular import
     or putt function in to the model.Image"""
     from image.models import Image
     if hasattr(instance, 'company_logo'):

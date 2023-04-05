@@ -63,11 +63,11 @@ class CreateCompanySerializer(serializers.ModelSerializer):
         legal_address_data = validated_data.pop('legal_address')
         actual_address_data = validated_data.pop('actual_address')
         logo_data = validated_data.pop('logo')
-        # rewrite the address separately by using 'Serializer'
+        # make address and logo object separately by using custom 'Serializer'
         instance.legal_address = AddressSerializer().update(instance.legal_address, legal_address_data)
         instance.actual_address = AddressSerializer().update(instance.actual_address, actual_address_data)
         instance.logo = ImageSerializer().update(instance.logo, logo_data)
-        return super().update(instance, validated_data)  # rewrite company by default method - 'update'
+        return super().update(instance, validated_data)  # using default method - 'update' for company
 
     def validate(self, attrs):  # take from request context users password and check in database
         if user := self.context.get('user'):
