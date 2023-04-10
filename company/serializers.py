@@ -47,15 +47,18 @@ class CreateCompanySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         legal_address_data = validated_data.pop('legal_address')  # data from custom serializer
         actual_address_data = validated_data.pop('actual_address')  # data from custom serializer
-        logo_data = validated_data.pop('logo')  # data from custom serializer
+        logo_data = validated_data.pop('logo', None)    # for correct work we must set default None if no image in logo
         with transaction.atomic():
             # atomic should stop other requests to db until we make the changes
             company = Company.objects.create(
                 legal_address=Address.objects.create(**legal_address_data),
                 actual_address=Address.objects.create(**actual_address_data),
-                logo=Image.objects.create(**logo_data),
+                logo=Image.objects.create(image=None),  # need to create empty logo to set company_id
                 **validated_data,
             )
+            # product.logo.image.save don't work if logo/image None so we need we have to rule out these options
+            if logo_data and logo_data.get('image'):
+                company.logo.image.save(f'{company.legal_name}.jpg', logo_data['image'])
         return company
 
     def update(self, instance, validated_data):
@@ -65,7 +68,12 @@ class CreateCompanySerializer(serializers.ModelSerializer):
         # make address and logo object separately by using custom 'Serializer'
         instance.legal_address = AddressSerializer().update(instance.legal_address, legal_address_data)
         instance.actual_address = AddressSerializer().update(instance.actual_address, actual_address_data)
-        instance.logo = ImageSerializer().update(instance.logo, logo_data)
+        if logo_data and logo_data.get('image'):
+            instance.logo.image.delete()
+            instance.logo.image.save(f'{instance.legal_name}.jpg', logo_data['image'])
+        else:
+            instance.logo.image.delete()
+            instance.logo = ImageSerializer().update(instance.logo, logo_data)
         return super().update(instance, validated_data)  # using default method - 'update' for company
 
     def validate(self, attrs):  # take from request context users password and check in database

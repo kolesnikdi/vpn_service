@@ -43,13 +43,12 @@ INSTALLED_APPS = [
     'registration',
     'address',
     'image',
+    'product',
 
     # 'client',
     # 'manager',
     # 'menu',
     # 'owner',
-    # 'product',
-
 ]
 
 AUTH_USER_MODEL = 'registration.WebMenuUser'

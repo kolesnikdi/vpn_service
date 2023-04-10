@@ -12,6 +12,7 @@ from company.models import Company
 from address.models import Address
 from image.models import Image
 from location.models import Location
+from product.models import Product
 from registration.models import RegistrationTry
 
 """randomizers"""
@@ -35,6 +36,10 @@ class Randomizer:
     def random_name(self):
         """ randomize data for first_name, last_name"""
         return ''.join(random.choice(string.ascii_letters) for i in range(10)).title()
+
+    def random_name_limit(self, limit):
+        """ randomize data for first_name, last_name"""
+        return ''.join(random.choice(string.ascii_letters) for i in range(limit)).title()
 
     def random_phone(self):
         """ randomize data for mobile phone"""
@@ -67,6 +72,10 @@ class Randomizer:
     def random_digits(self):
         """ randomize digits"""
         return ''.join(random.choice(string.digits) for i in range(10))
+
+    def random_digits_limit(self, limit):
+        """ randomize digits"""
+        return ''.join(random.choice(string.digits) for i in range(limit))
 
     def company_data(self):
         data = {
@@ -102,6 +111,16 @@ class Randomizer:
         }
         return data
 
+    def product_data(self):
+        data = {
+            'name': self.random_name(),
+            'logo': {'image': None},  # todo upload image
+            'description': self.upp2_data(),
+            'volume': self.random_digits_limit(4),
+            'measure': random.choice([0, 1, 2]),
+            'cost': self.random_digits_limit(4),
+        }
+        return data
 
 """created custom users"""
 
@@ -211,4 +230,23 @@ def custom_location(randomizer, custom_company):
     )
     location.user_password = custom_company.user_password
     location.company_id = custom_company.id
+    location.company = custom_company
+    location.user = custom_company.user
     return location
+
+@pytest.fixture(scope='function')
+def custom_product(randomizer, custom_location):
+    data = randomizer.product_data()
+    product = Product.objects.create(
+        company=custom_location.company,
+        name=data['name'],
+        logo=Image.objects.create(**data['logo']),
+        description=data['description'],
+        volume=data['volume'],
+        measure=data['measure'],
+        cost=data['cost']
+    )
+    product.locations.set([custom_location])
+    product.company_id = custom_location.company_id
+    product.location_id = custom_location.id
+    return product

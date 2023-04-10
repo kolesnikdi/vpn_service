@@ -9,5 +9,6 @@ urlpatterns = [
     path('registration/', include('registration.urls')),
     path('company/', include('company.urls')),
     path('location/', include('location.urls')),
+    path('product/', include('product.urls')),
     path('user/', WebMenuUserViewSet.as_view(), name='user'),
 ]
