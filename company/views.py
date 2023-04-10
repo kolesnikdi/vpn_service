@@ -41,5 +41,5 @@ class CreateCompanyView(viewsets.ModelViewSet):
     #     return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        """signs the post by name of user."""
+        """signs the company by name of user."""
         serializer.save(owner=self.request.user)

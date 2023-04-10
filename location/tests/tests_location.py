@@ -8,7 +8,7 @@ from location.models import Location
 
 class TestValidateCompany:
 
-    def test_passwords_incorrect(self, custom_company, randomizer):
+    def test_company_does_not_exist(self, custom_company, randomizer):
         data = randomizer.location_data()
         data['password'] = custom_company.user_password
         data['company'] = custom_company.id + 10
