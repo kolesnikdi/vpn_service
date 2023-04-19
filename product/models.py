@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.core.validators import integer_validator
 
 from enum import IntEnum
 
@@ -16,10 +15,10 @@ class Product(models.Model):
     locations = models.ManyToManyField('location.Location', related_name='product_location')
     name = models.CharField('name', max_length=15)
     description = models.CharField('description', max_length=30)
-    volume = models.CharField('volume', validators=[integer_validator], max_length=4)
+    volume = models.PositiveSmallIntegerField('volume', default=0)
     measure = models.PositiveSmallIntegerField('measure', choices=list((i.value, i.name) for i in Measures))
     # measure = models.PositiveSmallIntegerField('measure', choices=Measures.choices) # for models.IntegerChoices
-    cost = models.CharField('cost', validators=[integer_validator], max_length=4)
+    cost = models.DecimalField('cost', decimal_places=2, default=0, max_digits=7)
     logo = models.OneToOneField('image.Image', related_name='product_logo', null=True, on_delete=models.CASCADE)
     created_date = models.DateTimeField(default=timezone.now)
 

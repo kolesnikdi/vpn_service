@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 
     # libraries
     'rest_framework',
+    'django_filters',
     'phonenumber_field',
     'knox',
 
@@ -44,10 +45,10 @@ INSTALLED_APPS = [
     'address',
     'image',
     'product',
+    'menu',
 
     # 'client',
     # 'manager',
-    # 'menu',
     # 'owner',
 ]
 
@@ -138,6 +139,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }

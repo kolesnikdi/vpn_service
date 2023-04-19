@@ -122,6 +122,7 @@ class Randomizer:
         }
         return data
 
+
 """created custom users"""
 
 
@@ -218,6 +219,24 @@ def custom_company(authenticated_client_2_pass, randomizer):
     return company
 
 @pytest.fixture(scope='function')
+def custom_company_2(authenticated_client, randomizer):
+    company_data = randomizer.company_data()
+    company = Company.objects.create(
+        owner=authenticated_client.user,
+        logo=Image.objects.create(**company_data['logo']),
+        legal_name=company_data['legal_name'],
+        legal_address=Address.objects.create(**company_data['legal_address']),
+        actual_address=Address.objects.create(**company_data['actual_address']),
+        code_USREOU=company_data['code_USREOU'],
+        phone=company_data['phone'],
+        email=company_data['email']
+    )
+    company.user_password = authenticated_client.user.user_password
+    company.user = authenticated_client
+    return company
+
+
+@pytest.fixture(scope='function')
 def custom_location(randomizer, custom_company):
     data = randomizer.location_data()
     location = Location.objects.create(
@@ -233,6 +252,7 @@ def custom_location(randomizer, custom_company):
     location.company = custom_company
     location.user = custom_company.user
     return location
+
 
 @pytest.fixture(scope='function')
 def custom_product(randomizer, custom_location):
@@ -250,3 +270,27 @@ def custom_product(randomizer, custom_location):
     product.company_id = custom_location.company_id
     product.location_id = custom_location.id
     return product
+
+
+@pytest.fixture(scope='function')
+def custom_products_for_filtering(randomizer, custom_location):
+    counter = 0
+    products = []
+    while counter < 3:
+        counter += 1
+        data = randomizer.product_data()
+        product = Product.objects.create(
+            company=custom_location.company,
+            name=data['name'],
+            logo=Image.objects.create(**data['logo']),
+            description=data['description'],
+            volume=data['volume'],
+            measure=data['measure'],
+            cost=data['cost']
+        )
+        product.locations.set([custom_location])
+        product.company_id = custom_location.company_id
+        product.location_id = custom_location.id
+        products.append(product)
+        products.sort(key=lambda x: x.cost)  # ordering objects in list by cost
+    return products

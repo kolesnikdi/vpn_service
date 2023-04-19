@@ -8,7 +8,17 @@ from location.models import Location
 
 class TestValidateCompany:
 
-    def test_company_does_not_exist(self, custom_company, randomizer):
+    def test_company_incorrect(self, custom_company, randomizer, custom_company_2):
+        data = randomizer.location_data()
+        data['password'] = custom_company.user_password
+        data['company'] = custom_company_2.id
+        response = custom_company.user.post(reverse('location_new-list'), data=data, format='json')
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        response_json = response.json()
+        assert response_json
+        assert response_json['company'] == 'Company does not found.'
+
+    def test_company_defunct(self, custom_company, randomizer):
         data = randomizer.location_data()
         data['password'] = custom_company.user_password
         data['company'] = custom_company.id + 10

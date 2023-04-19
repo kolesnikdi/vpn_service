@@ -7,3 +7,4 @@ pytest==7.2.0
 django-rest-knox==4.2.0
 django-phonenumber-field[phonenumberslite]
 Pillow==9.4.0
+django-filter==23.1

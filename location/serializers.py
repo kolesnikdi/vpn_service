@@ -17,7 +17,7 @@ class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ['company', 'id', 'legal_name', 'logo', 'address', 'phone', 'email']
+        fields = ['company', 'id', 'legal_name', 'logo', 'address', 'phone', 'email', 'menu', 'code']
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -32,14 +32,14 @@ class ImageSerializer(serializers.ModelSerializer):
 class CreateLocationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
     owner = serializers.ReadOnlyField(source='owner.email')
-    company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), required=True)  # testit!
+    company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), required=True)  # todo make filter by owner
     address = AddressSerializer()
     logo = ImageSerializer()
 
     def validate_company(self, company):
         if user := self.context.get('user'):
             if company not in user.company.all():
-                raise exceptions.NotFound({"company": "Not found."})
+                raise exceptions.NotFound({"company": "Company does not found."})
 
         return company
 

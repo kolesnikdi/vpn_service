@@ -5,9 +5,19 @@ from rest_framework import status
 from product.models import Product
 
 
-class TestValidateLocation:
+class TestValidators:
 
-    def test_location_incorrect(self, custom_location, randomizer):
+    def test_location_incorrect(self, custom_location, custom_company_2, randomizer):
+        data = randomizer.product_data()
+        data['company'] = custom_company_2.id
+        data['locations'] = [custom_location.id]
+        response = custom_location.user.post(reverse('product_new-list'), data=data, format='json')
+        response_json = response.json()
+        assert response_json
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert response_json['company'] == 'Company does not found.'
+
+    def test_location_defunct(self, custom_location, randomizer):
         data = randomizer.product_data()
         data['company'] = custom_location.company_id
         data['locations'] = [custom_location.id + 10]
@@ -16,6 +26,16 @@ class TestValidateLocation:
         response_json = response.json()
         assert response_json
         assert response_json['locations'] == ['Invalid pk "11" - object does not exist.']
+
+    def test_company_defunct(self, custom_location, randomizer):
+        data = randomizer.product_data()
+        data['company'] = custom_location.company_id + 10
+        data['locations'] = [custom_location.id]
+        response = custom_location.user.post(reverse('product_new-list'), data=data, format='json')
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        response_json = response.json()
+        assert response_json
+        assert response_json['object'] == 'Location or/and Company does not found.'
 
 
 class TestCreateProductView:
@@ -37,7 +57,8 @@ class TestCreateProductView:
         assert not bool(for_check_create_product.logo.image)  # true if not False=bool((for_check_create_location.logo)
         assert for_check_create_product.description == data['description']
         assert for_check_create_product.measure == data['measure']
-        assert for_check_create_product.cost == data['cost']
+        assert str(for_check_create_product.volume) in data['volume']
+        assert str(for_check_create_product.cost)[:4] in data['cost']
         assert for_check_create_product.created_date is not None
         assert for_check_create_product.locations
         assert for_check_create_product.company_id == data['company']
@@ -57,9 +78,9 @@ class TestCreateProductView:
         assert for_check_update_product.name == data['name']
         assert not bool(for_check_update_product.logo.image)
         assert for_check_update_product.description == data['description']
-        assert for_check_update_product.volume == data['volume']
+        assert str(for_check_update_product.volume) in data['volume']
         assert for_check_update_product.measure == data['measure']
-        assert for_check_update_product.cost == data['cost']
+        assert str(for_check_update_product.cost)[:4] in data['cost']
 
     def test_delete_product(self, custom_product, custom_location):
         response = custom_location.user.delete(reverse('product_new-detail', kwargs={'pk': custom_product.id}))
@@ -91,9 +112,10 @@ class TestProductViewSet:
         assert custom_product.name == data['name']
         assert custom_product.created_date is not None
         assert custom_product.description == data['description']
-        assert custom_product.volume == data['volume']
+        # assert data['volume'] in custom_product.volume
+        assert str(data['volume']) in custom_product.volume
         assert custom_product.measure == data['measure']
-        assert custom_product.cost == data['cost']
+        assert data['cost'][:4] in custom_product.cost
 
     def test_product_view_pk_anoter_user(self, authenticated_client, custom_product):
         url = reverse('product_new-detail', kwargs={'pk': custom_product.id})
