@@ -6,9 +6,19 @@ from address.models import Address
 from location.models import Location
 
 
-class TestValidateCompany:
+class TestCreateLocationView:
 
-    def test_company_does_not_exist(self, custom_company, randomizer):
+    def test_create_location_with_extraneous_company_id(self, custom_company, randomizer, custom_company_2):
+        data = randomizer.location_data()
+        data['password'] = custom_company.user_password
+        data['company'] = custom_company_2.id
+        response = custom_company.user.post(reverse('location_new-list'), data=data, format='json')
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        response_json = response.json()
+        assert response_json
+        assert response_json['company'] == 'Company does not found.'
+
+    def test_create_location_with_defunct_company_id(self, custom_company, randomizer):
         data = randomizer.location_data()
         data['password'] = custom_company.user_password
         data['company'] = custom_company.id + 10
@@ -18,9 +28,7 @@ class TestValidateCompany:
         assert response_json
         assert response_json['company'] == ['Invalid pk "11" - object does not exist.']
 
-
-class TestCreateLocationView:
-    def test_create_location_valid(self, custom_company, randomizer):
+    def test_create_location_valid_data(self, custom_company, randomizer):
         data = randomizer.location_data()
         data['password'] = custom_company.user_password
         data['company'] = custom_company.id
@@ -41,7 +49,7 @@ class TestCreateLocationView:
         assert for_check_create_address.house_number == data['address']['house_number']
         assert for_check_create_address.flat_number == data['address']['flat_number']
 
-    def test_update_location_valid(self, randomizer, custom_company, custom_location):
+    def test_update_location_valid_data(self, randomizer, custom_company, custom_location):
         data = randomizer.location_data()
         data['password'] = custom_company.user_password
         data['company'] = custom_company.id
@@ -83,6 +91,7 @@ class TestCreateLocationView:
 
 
 class TestLocationViewSet:
+
     def test_location_view_owner(self, authenticated_client_2_pass, custom_location):
         response = authenticated_client_2_pass.get(reverse('location'), format='json')
         response_json = response.json()
@@ -95,7 +104,7 @@ class TestLocationViewSet:
         assert custom_location.phone == data['phone']
         assert custom_location.email == data['email']
 
-    def test_location_view_pk_anoter_user(self, authenticated_client, custom_location):
+    def test_location_view_pk_by_another_user(self, authenticated_client, custom_location):
         url = reverse('location_new-detail', kwargs={'pk': custom_location.id})
         response = authenticated_client.get(url, format='json')
         assert response.status_code == status.HTTP_404_NOT_FOUND

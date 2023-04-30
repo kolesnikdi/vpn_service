@@ -61,6 +61,7 @@ class CreateCompanySerializer(serializers.ModelSerializer):
                 company.logo.image.save(f'{company.legal_name}.jpg', logo_data['image'])
         return company
 
+    # https: // rozetka.com.ua/uuid/?text=iphone+14
     def update(self, instance, validated_data):
         legal_address_data = validated_data.pop('legal_address')
         actual_address_data = validated_data.pop('actual_address')

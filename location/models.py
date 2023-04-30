@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils import timezone
 
@@ -14,6 +16,8 @@ class Location(models.Model):
                              error_messages={'unique': 'Not a valid mobile phone. Enter again and correctly.'})
     email = models.EmailField(verbose_name='email address', db_index=True, max_length=50)
     created_date = models.DateTimeField(default=timezone.now)
+    code = models.UUIDField(db_index=True, default=uuid.uuid4)
+
 
     def __str__(self):
         return self.legal_name

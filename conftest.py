@@ -75,7 +75,8 @@ class Randomizer:
 
     def random_digits_limit(self, limit):
         """ randomize digits"""
-        return ''.join(random.choice(string.digits) for i in range(limit))
+        digit = '123456789'
+        return ''.join(random.choice(digit) for i in range(limit))
 
     def company_data(self):
         data = {
@@ -121,6 +122,7 @@ class Randomizer:
             'cost': self.random_digits_limit(4),
         }
         return data
+
 
 """created custom users"""
 
@@ -197,7 +199,7 @@ def reg_done_code(api_client, reg_try, randomizer):
     return for_check_reg_try.code
 
 
-"""created custom company"""
+"""created custom company / location / product"""
 
 
 @pytest.fixture(scope='function')
@@ -211,42 +213,81 @@ def custom_company(authenticated_client_2_pass, randomizer):
         actual_address=Address.objects.create(**company_data['actual_address']),
         code_USREOU=company_data['code_USREOU'],
         phone=company_data['phone'],
-        email=company_data['email']
+        email=company_data['email'],
     )
     company.user_password = authenticated_client_2_pass.user.user_password
     company.user = authenticated_client_2_pass
     return company
 
+
+@pytest.fixture(scope='function')
+def custom_company_2(authenticated_client, randomizer):
+    company_data = randomizer.company_data()
+    company = Company.objects.create(
+        owner=authenticated_client.user,
+        logo=Image.objects.create(**company_data['logo']),
+        legal_name=company_data['legal_name'],
+        legal_address=Address.objects.create(**company_data['legal_address']),
+        actual_address=Address.objects.create(**company_data['actual_address']),
+        code_USREOU=company_data['code_USREOU'],
+        phone=company_data['phone'],
+        email=company_data['email'],
+    )
+    company.user_password = authenticated_client.user.user_password
+    company.user = authenticated_client
+    return company
+
+
 @pytest.fixture(scope='function')
 def custom_location(randomizer, custom_company):
     data = randomizer.location_data()
     location = Location.objects.create(
-        company=custom_company,
+        company_id=custom_company.id,
         logo=Image.objects.create(**data['logo']),
         legal_name=data['legal_name'],
         address=Address.objects.create(**data['address']),
         phone=data['phone'],
-        email=data['email']
+        email=data['email'],
     )
     location.user_password = custom_company.user_password
-    location.company_id = custom_company.id
-    location.company = custom_company
     location.user = custom_company.user
     return location
+
 
 @pytest.fixture(scope='function')
 def custom_product(randomizer, custom_location):
     data = randomizer.product_data()
     product = Product.objects.create(
-        company=custom_location.company,
+        company_id=custom_location.company.id,
         name=data['name'],
         logo=Image.objects.create(**data['logo']),
         description=data['description'],
         volume=data['volume'],
         measure=data['measure'],
-        cost=data['cost']
+        cost=data['cost'],
     )
-    product.locations.set([custom_location])
-    product.company_id = custom_location.company_id
+    product.locations.set([custom_location.id])
     product.location_id = custom_location.id
     return product
+
+
+@pytest.fixture(scope='function')
+def custom_products_for_filtering(randomizer, custom_location):
+    products = []
+    for _ in range(10):
+        data = randomizer.product_data()
+        product = Product(
+            company_id=custom_location.company.id,
+            name=data['name'],
+            logo=Image.objects.create(**data['logo']),
+            description=data['description'],
+            volume=data['volume'],
+            measure=data['measure'],
+            cost=data['cost'],
+        )
+        products.append(product)
+    product_qs = Product.objects.bulk_create(products)
+    # with a reverse query, we make a record in the database in one pass
+    custom_location.product_location.set(product_qs)
+
+    return product_qs

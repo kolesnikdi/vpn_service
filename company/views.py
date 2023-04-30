@@ -20,9 +20,9 @@ class CompanyViewSet(viewsets.ModelViewSet):
 class CreateCompanyView(viewsets.ModelViewSet):
     serializer_class = CreateCompanySerializer
     permission_classes = [IsAuthenticated, IsOwnerOr404]
-    # add .order_by('id') to improve UnorderedObjectListWarning: Pagination may yield inconsistent results with
-    # an unordered object_list
-    queryset = Company.objects.all().order_by('id')
+
+    def get_queryset(self):
+        return self.request.user.company.all().order_by('id')
 
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

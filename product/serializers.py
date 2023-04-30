@@ -28,12 +28,18 @@ class CreateProductSerializer(serializers.ModelSerializer):
     locations = serializers.PrimaryKeyRelatedField(queryset=Location.objects.all(), required=True, many=True)
     logo = ProductImageSerializer(allow_null=True,  required=False)
 
-
     def validate_company(self, company):  # todo when manager.exist make validator - if location not in user
         if user := self.context.get('user'):
             if company not in user.company.all():
-                raise exceptions.NotFound({"company": "Not found."})
+                raise exceptions.NotFound({"company": "Company does not found."})
         return company
+
+    def validate_locations(self, locations):
+        if company_id := self.initial_data.get('company'):
+            for location in locations:
+                if location.company_id != int(company_id):
+                    raise exceptions.NotFound({"object": "Location or/and Company does not found."})
+        return locations
 
     class Meta:
         model = Product
