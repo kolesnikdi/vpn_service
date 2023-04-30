@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='measure',
-            field=models.PositiveSmallIntegerField(choices=[(0, 'milligrams'), (1, 'grams'), (2, 'pieces')], verbose_name='measure'),
+            field=models.PositiveSmallIntegerField(choices=[(0, 'Milligrams'), (1, 'Grams'), (2, 'Pieces')], verbose_name='measure'),
         ),
     ]

@@ -75,7 +75,8 @@ class Randomizer:
 
     def random_digits_limit(self, limit):
         """ randomize digits"""
-        return ''.join(random.choice(string.digits) for i in range(limit))
+        digit = '123456789'
+        return ''.join(random.choice(digit) for i in range(limit))
 
     def company_data(self):
         data = {
@@ -198,7 +199,7 @@ def reg_done_code(api_client, reg_try, randomizer):
     return for_check_reg_try.code
 
 
-"""created custom company"""
+"""created custom company / location / product"""
 
 
 @pytest.fixture(scope='function')
@@ -212,11 +213,12 @@ def custom_company(authenticated_client_2_pass, randomizer):
         actual_address=Address.objects.create(**company_data['actual_address']),
         code_USREOU=company_data['code_USREOU'],
         phone=company_data['phone'],
-        email=company_data['email']
+        email=company_data['email'],
     )
     company.user_password = authenticated_client_2_pass.user.user_password
     company.user = authenticated_client_2_pass
     return company
+
 
 @pytest.fixture(scope='function')
 def custom_company_2(authenticated_client, randomizer):
@@ -229,7 +231,7 @@ def custom_company_2(authenticated_client, randomizer):
         actual_address=Address.objects.create(**company_data['actual_address']),
         code_USREOU=company_data['code_USREOU'],
         phone=company_data['phone'],
-        email=company_data['email']
+        email=company_data['email'],
     )
     company.user_password = authenticated_client.user.user_password
     company.user = authenticated_client
@@ -240,16 +242,14 @@ def custom_company_2(authenticated_client, randomizer):
 def custom_location(randomizer, custom_company):
     data = randomizer.location_data()
     location = Location.objects.create(
-        company=custom_company,
+        company_id=custom_company.id,
         logo=Image.objects.create(**data['logo']),
         legal_name=data['legal_name'],
         address=Address.objects.create(**data['address']),
         phone=data['phone'],
-        email=data['email']
+        email=data['email'],
     )
     location.user_password = custom_company.user_password
-    location.company_id = custom_company.id
-    location.company = custom_company
     location.user = custom_company.user
     return location
 
@@ -258,39 +258,36 @@ def custom_location(randomizer, custom_company):
 def custom_product(randomizer, custom_location):
     data = randomizer.product_data()
     product = Product.objects.create(
-        company=custom_location.company,
+        company_id=custom_location.company.id,
         name=data['name'],
         logo=Image.objects.create(**data['logo']),
         description=data['description'],
         volume=data['volume'],
         measure=data['measure'],
-        cost=data['cost']
+        cost=data['cost'],
     )
-    product.locations.set([custom_location])
-    product.company_id = custom_location.company_id
+    product.locations.set([custom_location.id])
     product.location_id = custom_location.id
     return product
 
 
 @pytest.fixture(scope='function')
 def custom_products_for_filtering(randomizer, custom_location):
-    counter = 0
     products = []
-    while counter < 3:
-        counter += 1
+    for _ in range(10):
         data = randomizer.product_data()
-        product = Product.objects.create(
-            company=custom_location.company,
+        product = Product(
+            company_id=custom_location.company.id,
             name=data['name'],
             logo=Image.objects.create(**data['logo']),
             description=data['description'],
             volume=data['volume'],
             measure=data['measure'],
-            cost=data['cost']
+            cost=data['cost'],
         )
-        product.locations.set([custom_location])
-        product.company_id = custom_location.company_id
-        product.location_id = custom_location.id
         products.append(product)
-        products.sort(key=lambda x: x.cost)  # ordering objects in list by cost
-    return products
+    product_qs = Product.objects.bulk_create(products)
+    # with a reverse query, we make a record in the database in one pass
+    custom_location.product_location.set(product_qs)
+
+    return product_qs

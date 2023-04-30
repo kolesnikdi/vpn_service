@@ -19,7 +19,7 @@ class TestValidators:
 
     def test_location_defunct(self, custom_location, randomizer):
         data = randomizer.product_data()
-        data['company'] = custom_location.company_id
+        data['company'] = custom_location.company.id
         data['locations'] = [custom_location.id + 10]
         response = custom_location.user.post(reverse('product_new-list'), data=data, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -29,7 +29,7 @@ class TestValidators:
 
     def test_company_defunct(self, custom_location, randomizer):
         data = randomizer.product_data()
-        data['company'] = custom_location.company_id + 10
+        data['company'] = custom_location.company.id + 10
         data['locations'] = [custom_location.id]
         response = custom_location.user.post(reverse('product_new-list'), data=data, format='json')
         assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -42,7 +42,7 @@ class TestCreateProductView:
     def test_create_product_valid(self, custom_location, randomizer):
         data = randomizer.product_data()
         data['locations'] = [custom_location.id]
-        data['company'] = custom_location.company_id
+        data['company'] = custom_location.company.id
         old_products_ids = list(Product.objects.all().values_list('id', flat=True))  # check if old notes exist
         # flat=True - makes one list from tuple lists
         response = custom_location.user.post(reverse('product_new-list'), data=data, format='json')
@@ -66,7 +66,7 @@ class TestCreateProductView:
     def test_update_product_valid(self, randomizer, custom_product, custom_location):
         data = randomizer.product_data()
         data['locations'] = [custom_location.id]
-        data['company'] = custom_location.company_id
+        data['company'] = custom_location.company.id
         old_products_ids = list(Product.objects.all().values_list('id', flat=True))  # check if old notes exist
         assert old_products_ids
         assert len(old_products_ids) == 1
@@ -93,7 +93,7 @@ class TestCreateProductView:
     def test_update_product_another_client(self, authenticated_client, custom_product, randomizer):
         data = randomizer.product_data()
         data['locations'] = [custom_product.location_id]
-        data['company'] = custom_product.company_id
+        data['company'] = custom_product.company.id
         url = reverse('product_new-detail', kwargs={'pk': custom_product.id})
         response = authenticated_client.put(url, data=data, format='json')
         assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -112,7 +112,6 @@ class TestProductViewSet:
         assert custom_product.name == data['name']
         assert custom_product.created_date is not None
         assert custom_product.description == data['description']
-        # assert data['volume'] in custom_product.volume
         assert str(data['volume']) in custom_product.volume
         assert custom_product.measure == data['measure']
         assert data['cost'][:4] in custom_product.cost

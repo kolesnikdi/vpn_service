@@ -17,7 +17,7 @@ class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ['company', 'id', 'legal_name', 'logo', 'address', 'phone', 'email', 'menu', 'code']
+        fields = ['company', 'id', 'legal_name', 'logo', 'address', 'phone', 'email', 'code']
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -31,8 +31,8 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class CreateLocationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
-    owner = serializers.ReadOnlyField(source='owner.email')
-    company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), required=True)  # todo make filter by owner
+    owner = serializers.ReadOnlyField(source='company.owner.email')
+    company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), required=True)  #todo make filter by owner
     address = AddressSerializer()
     logo = ImageSerializer()
 

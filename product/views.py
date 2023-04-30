@@ -29,9 +29,9 @@ class CreateProductView(viewsets.ModelViewSet):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def get_serializer(self, *args, **kwargs):
-        context = kwargs.setdefault('context', {})  # if no dict in kwargs we make it
+        kwargs.setdefault('context', {})  # if no dict in kwargs we make it
         # join user to the serializer context for opportunity def validate in CreateCompanySerializer
-        context['user'] = self.request.user
+        kwargs['context']['user'] = self.request.user
         return super().get_serializer(*args, **kwargs)
 
 
