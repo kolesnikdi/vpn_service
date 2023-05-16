@@ -15,6 +15,7 @@ from location.models import Location
 from product.models import Product
 from registration.models import RegistrationTry
 
+
 """randomizers"""
 
 

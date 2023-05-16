@@ -124,7 +124,7 @@ class TestCompanyViewSet:
         data = response_json['results'][0]
         assert response_json
         assert response.status_code == status.HTTP_200_OK
-        assert custom_company.owner_id == data['id']
+        assert custom_company.id == data['id']
         assert custom_company.legal_name == data['legal_name']
         assert custom_company.legal_address
         assert custom_company.actual_address_id is not None

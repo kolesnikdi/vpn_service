@@ -84,13 +84,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Web_Menu_DA.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
+"""If we wont to work with DB from local machine and from docker at the same time we must:
+1. make personal .env file for docker / docker-compose or directly write environment data in docker / docker-compose
+2. we do not need an .env file with data for the local machine. Django does not read this data
+3. the data for ENGINE, NAME, USER must be specified directly
+4. data for HOST must be specified with reference to the internal .env file in the dock
+5. data for PORT must be specified with reference to the internal .env file in the dock. Also, if we changed the
+ standard output port (5432), we must specify the new one as an alternative for connection"""
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB", 'Postgres_Web_Menu_DA'),
+        "USER": os.environ.get("POSTGRES_USER", 'postgres'),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", 'K@i160486'),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5433"),
     }
 }
 
