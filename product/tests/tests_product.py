@@ -25,7 +25,7 @@ class TestValidators:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         response_json = response.json()
         assert response_json
-        assert response_json['locations'] == ['Invalid pk "11" - object does not exist.']
+        assert response_json['locations'] == [f'Invalid pk "{custom_location.id + 10}" - object does not exist.']
 
     def test_company_defunct(self, custom_location, randomizer):
         data = randomizer.product_data()

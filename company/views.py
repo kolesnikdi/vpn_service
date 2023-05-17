@@ -2,7 +2,6 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from company.models import Company
 from company.serializers import CreateCompanySerializer, CompanySerializer
 from Web_Menu_DA.permissions import IsOwnerOr404
 

@@ -26,7 +26,7 @@ class TestCreateLocationView:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         response_json = response.json()
         assert response_json
-        assert response_json['company'] == ['Invalid pk "11" - object does not exist.']
+        assert response_json['company'] == [f'Invalid pk "{custom_company.id + 10}" - object does not exist.']
 
     def test_create_location_valid_data(self, custom_company, randomizer):
         data = randomizer.location_data()
