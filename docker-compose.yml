@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.development
+      dockerfile: Docker/web/dockerfile_web
     ports:
       - 8000:8000
     volumes:
@@ -11,28 +11,31 @@ services:
 #    environment:   # To set env data if it are not defined in the /Web_Menu_DA/.env.docker
 #      - POSTGRES_HOST=db
     env_file:
-      - Web_Menu_DA/.env.docker
+      - Docker/.env.docker
     depends_on:
       - db
   db:
 #    image: postgres:13   # to start db without Dockerfile. disable next 3 rows
     build:
       context: .
-      dockerfile: Dockerfile_db
+      dockerfile: Docker/db/dockerfile_db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - Web_Menu_DA/.env.docker
+      - Docker/.env.docker
     ports:
       - 5433:5432  # local port : container port
     expose:
       - 5432
 
   adminer: # docker with program adminer. It is app for web access to DB Postgres
-    image: adminer:4.8.1
+#    image: adminer:4.8.1   # to start db without Dockerfile. disable next 3 rows
+    build:
+      context: .
+      dockerfile: Docker/adminer/dockerfile_adminer
     restart: always
-    environment:
-      ADMINER_DEFAULT_SERVER: db
+#    environment:     # to set env without Dockerfile. disable env in Dockerfile_adminer
+#      ADMINER_DEFAULT_SERVER: db
     depends_on:
       - db
     ports:
