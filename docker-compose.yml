@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Docker/web/dockerfile_web
+      dockerfile: Docker/web/Dockerfile
     ports:
       - 8000:8000
     volumes:
@@ -18,7 +18,7 @@ services:
 #    image: postgres:13   # to start db without Dockerfile. disable next 3 rows
     build:
       context: .
-      dockerfile: Docker/db/dockerfile_db
+      dockerfile: Docker/db/Dockerfile
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
@@ -32,7 +32,7 @@ services:
 #    image: adminer:4.8.1   # to start db without Dockerfile. disable next 3 rows
     build:
       context: .
-      dockerfile: Docker/adminer/dockerfile_adminer
+      dockerfile: Docker/adminer/Dockerfile
     restart: always
 #    environment:     # to set env without Dockerfile. disable env in Dockerfile_adminer
 #      ADMINER_DEFAULT_SERVER: db

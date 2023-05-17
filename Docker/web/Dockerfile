@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install netcat mc -y
 WORKDIR /WEB_menu_docker
 
 # Install dependencies
-COPY /requirements.txt .
 RUN pip3 install --upgrade pip
+COPY /requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy project
