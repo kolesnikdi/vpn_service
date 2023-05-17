@@ -13,12 +13,12 @@ RUN apt-get update && apt-get install netcat mc -y
 WORKDIR /WEB_menu_docker
 
 # Install dependencies
-COPY /requirements.txt .
 RUN pip3 install --upgrade pip
+COPY /requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy project
-COPY . .
+COPY ../.. .
 # Importante comande. Need for entrypoint.sh worck
-CMD ["bash", "-c", "chmod", "+x", "/WEB_menu_docker/entrypoint.sh"]
-ENTRYPOINT ["/WEB_menu_docker/entrypoint.sh"]
+CMD ["bash", "-c", "chmod", "+x", "/WEB_menu_docker/Docker/entrypoint.sh"]
+ENTRYPOINT ["/WEB_menu_docker/Docker/entrypoint.sh"]
