@@ -20,7 +20,7 @@ def final_send_mail(reg_try):
         'recipient_list': [reg_try.email],
         'fail_silently': False,
         'auth_user': os.environ.get('auth_user', 'segareta@ukr.net'),
-        'auth_password': os.environ.get('auth_password', 'bECLsOMF0qGMrd7L'),
+        'auth_password': os.environ.get('auth_password', 'Y32RepfABOJMYyui'),
         'html_message': render_to_string('registration_mail.html', context=context),
     }
     send_mail(**registration_mail)
