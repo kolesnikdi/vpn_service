@@ -24,7 +24,8 @@ HOST = os.environ.get('HOST_NAME', 'http://127.0.0.1:8000')
 ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
-
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/user'
+LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/django_auth/login'
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'image',
     'product',
     'menu',
+    'django_auth',
 
     # 'client',
     # 'manager',
@@ -74,7 +76,7 @@ ROOT_URLCONF = 'Web_Menu_DA.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'django_auth/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

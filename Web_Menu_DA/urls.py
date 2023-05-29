@@ -12,6 +12,7 @@ urlpatterns = [
     path('location/', include('location.urls')),
     path('product/', include('product.urls')),
     path('menu/', include('menu.urls')),
+    path('django_auth/', include('django_auth.urls')),
     path('user/', WebMenuUserViewSet.as_view(), name='user'),
 ]
 
