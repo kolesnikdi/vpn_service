@@ -24,8 +24,7 @@ HOST = os.environ.get('HOST_NAME', 'http://127.0.0.1:8000')
 ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
-LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/user'
-LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/django_auth/login'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,7 +51,6 @@ INSTALLED_APPS = [
     'image',
     'product',
     'menu',
-    'django_auth',
 
     # 'client',
     # 'manager',
@@ -76,7 +74,7 @@ ROOT_URLCONF = 'Web_Menu_DA.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'django_auth/templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -177,13 +175,18 @@ REST_KNOX = {
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
 
+""" 
+    For Authorisation in http://127.0.0.1:8000/swagger/:
+    1. Login in site and teke Token value
+    2. Enter string 'Token + Token value in Authorize button on page 
+    http://127.0.0.1:8000/swagger/'
+    """
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
-        'Token': {
-            'type': 'knox token',
+        'api_key': {
+            'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header',
         },
     },
-    'VALIDATOR_URL': 'http://127.0.0.1:8189',
 }
