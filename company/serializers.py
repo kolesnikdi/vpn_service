@@ -23,7 +23,7 @@ class CompanySerializer(serializers.ModelSerializer):
                   'email', 'location']
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class CompanyImageSerializer(serializers.ModelSerializer):
     """Special Serializer to customize validators=[validate_image_size]"""
     image = serializers.ImageField(use_url=True, allow_null=True, validators=[validate_image_size])
 
@@ -37,7 +37,7 @@ class CreateCompanySerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.email')
     legal_address = AddressSerializer()
     actual_address = AddressSerializer()
-    logo = ImageSerializer()
+    logo = CompanyImageSerializer()
 
     class Meta:
         model = Company
@@ -74,7 +74,7 @@ class CreateCompanySerializer(serializers.ModelSerializer):
             instance.logo.image.save(f'{instance.legal_name}.jpg', logo_data['image'])
         else:
             instance.logo.image.delete()
-            instance.logo = ImageSerializer().update(instance.logo, logo_data)
+            instance.logo = CompanyImageSerializer().update(instance.logo, logo_data)
         return super().update(instance, validated_data)  # using default method - 'update' for company
 
     def validate(self, attrs):  # take from request context users password and check in database

@@ -1,4 +1,6 @@
 import os
+from dotenv import load_dotenv  # need for correct work os.environ.get()
+
 from pathlib import Path
 
 """Next 2 string need for correct work knox Authentication"""
@@ -12,6 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+load_dotenv()  # need for correct work os.environ.get()
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-$pso2)*$i!8k#k_y^6j_31c@6@fv66+5)m1@0o3p3ii#p*use3')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -37,6 +40,8 @@ INSTALLED_APPS = [
     'django_filters',
     'phonenumber_field',
     'knox',
+    'drf_yasg',
+    'swagger',
 
     # applications
     'company',
@@ -168,4 +173,20 @@ REST_KNOX = {
     'AUTO_REFRESH': True,
     'MIN_REFRESH_INTERVAL': 360,
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
+}
+
+""" 
+    For Authorisation in http://127.0.0.1:8000/swagger/:
+    1. Login in site and teke Token value
+    2. Enter string 'Token + Token value in Authorize button on page 
+    http://127.0.0.1:8000/swagger/'
+    """
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        },
+    },
 }

@@ -8,3 +8,4 @@ staticfiles
 .DS_Store
 /media
 ../last_db/
+.env
