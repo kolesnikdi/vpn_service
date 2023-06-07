@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Enter valid data for registration{% endblock %}
+
+{% block content %}
+  {% if form %}
+    <form method="POST">
+      {% csrf_token %}
+      <h2>PLZ enter valid data for registration</h2>
+      {{ form.as_p }}
+      <input type="submit" value="SUBMIT" class="btn btn-primary"/>
+    </form>
+  {% endif %}
+
+{% endblock %}
