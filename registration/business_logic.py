@@ -10,7 +10,8 @@ from registration.models import WebMenuUser
 
 def final_send_mail(reg_try):
     context = {                                             #    """ more data in context to customisation email"""
-        'registration_link': f'{settings.HOST}/registration/{reg_try.code}'
+        'registration_link': f'{settings.HOST}/registration/{reg_try.code}',
+        'registration_link2': f'{settings.HOST}/registration/djangofunction/{reg_try.code}'
     }
 
     registration_mail = {

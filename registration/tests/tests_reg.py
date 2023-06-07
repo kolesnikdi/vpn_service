@@ -187,3 +187,57 @@ class TestKnoxView:
         assert not AuthToken.objects.filter(user_id=authenticated_client_2_pass.user.id).exists()
         response = authenticated_client_2_pass.get(reverse('user'))
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+class TestDjangoRegistrationFormFunction:
+
+    @pytest.mark.django_db
+    def test_registration_form_valid_data(self, api_client, randomizer):
+        response = api_client.post(reverse('djangoform'), data={'email': randomizer.email()})
+        assert response.status_code == status.HTTP_302_FOUND
+
+    @pytest.mark.django_db
+    def test_registration_funcrion_valid_data(self, api_client, randomizer):
+        response = api_client.post(reverse('djangofunction'), data={'email': randomizer.email()})
+        assert 'The Email was send successfully' in response.content.decode('utf-8')
+        assert response.status_code == status.HTTP_201_CREATED
+
+    @pytest.mark.django_db
+    def test_full_registration_funcrion_valid_data(self, api_client, reg_try, randomizer):
+        validated_data = randomizer.user()
+        data = {'password': validated_data['password'],
+                'confirm_password': validated_data['password'],
+                'first_name': validated_data['first_name'],
+                'last_name': validated_data['last_name'],
+                'fathers_name': validated_data['fathers_name'],
+                'mobile_phone': validated_data['mobile_phone'],
+                'country': validated_data['country'],
+                'city': validated_data['city'],
+                'street': validated_data['street'],
+                'house_number': validated_data['house_number'],
+                'flat_number': validated_data['flat_number'],
+                'passport_series': validated_data['passport_series'],
+                'passport_number': validated_data['passport_number'],
+                'passport_date_of_issue': validated_data['passport_date_of_issue'],
+                'passport_issuing_authority': validated_data['passport_issuing_authority'],
+                }
+        data_reg_try = RegistrationTry.objects.get(email=reg_try.data['email'])
+        url = reverse('djangofunction_confirm', args=[data_reg_try.code])
+        response = api_client.post(url, data=data)
+        assert response.status_code == status.HTTP_201_CREATED
+        assert 'You create user successful.' in response.content.decode('utf-8')
+        for_check_user = WebMenuUser.objects.get(email=reg_try.data['email'])
+        assert for_check_user.first_name == validated_data['first_name']
+        assert for_check_user.last_name == validated_data['last_name']
+        assert for_check_user.mobile_phone == validated_data['mobile_phone']
+        assert for_check_user.fathers_name == validated_data['fathers_name']
+        assert for_check_user.country == validated_data['country']
+        assert for_check_user.city == validated_data['city']
+        assert for_check_user.street == validated_data['street']
+        assert for_check_user.house_number == validated_data['house_number']
+        assert for_check_user.flat_number == validated_data['flat_number']
+        assert for_check_user.passport_series == validated_data['passport_series']
+        assert for_check_user.passport_number == validated_data['passport_number']
+        assert for_check_user.passport_date_of_issue == validated_data['passport_date_of_issue']
+        assert for_check_user.passport_issuing_authority == validated_data['passport_issuing_authority']
+        for_check_reg_try = RegistrationTry.objects.get(id=data_reg_try.id)
+        assert for_check_reg_try.confirmation_time is not None
