@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'knox',
     'drf_yasg',
     'swagger',
+    'redis',
 
     # applications
     'company',
@@ -151,7 +152,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), # KNOX settings
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
@@ -159,11 +160,12 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
-# email
+# email settings
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.ukr.net')
 EMAIL_PORT = 2525
 EMAIL_USE_SSL = True
 
+# KNOX settings
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
@@ -175,6 +177,7 @@ REST_KNOX = {
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
 
+# swagger settings
 """ 
     For Authorisation in http://127.0.0.1:8000/swagger/:
     1. Login in site and teke Token value
@@ -190,3 +193,22 @@ SWAGGER_SETTINGS = {
         },
     },
 }
+
+# Redis settings
+REDIS_HOST = 'redis_app'
+REDIS_PORT = 6379
+REDIS_DB = 0
+
+# Caches / Redis settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis_app:6379/1',
+        'TIMEOUT': 300,  # default timeout for all chash
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        'KEY_PREFIX': 'webmenu_redis_cache',
+    },
+}
+
