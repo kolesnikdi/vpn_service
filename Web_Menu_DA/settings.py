@@ -194,11 +194,6 @@ SWAGGER_SETTINGS = {
     },
 }
 
-# Redis settings
-REDIS_HOST = 'redis_app'
-REDIS_PORT = 6379
-REDIS_DB = 0
-
 # Caches / Redis settings
 CACHES = {
     'default': {
@@ -212,3 +207,9 @@ CACHES = {
     },
 }
 
+"""
+Redis settings to use Redis db directly. redis_app/redis_app.py
+"""
+REDIS_HOST = 'redis_app'
+REDIS_PORT = 6379
+REDIS_DB = 1

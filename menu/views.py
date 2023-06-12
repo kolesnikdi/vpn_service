@@ -18,13 +18,13 @@ class LocationMenuView(generics.RetrieveAPIView):
     search_fields = ['name', 'description']
     ordering_fields = ['name', 'cost', 'volume']
 
-    # @method_decorator(cache_page(30))
+    # @method_decorator(cache_page(5*60))
     def retrieve(self, request, *args, **kwargs):
         """
         Two options for cache operation:
-        1. Using a decorator (full page will be cached). Activate lines 21 and 32
+        1. Using a decorator (full page will be cached). Activate lines 21 and 34
         2. Using standard methods. Cache the DB request. Activate lines 35,36,37
-        and deactivate lines 21 and 32
+        and deactivate lines 21 and 34
         """
         if not (code := self.kwargs.get('code', None)):
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -34,7 +34,7 @@ class LocationMenuView(generics.RetrieveAPIView):
         # location_products_qs = location.product_location.all()
         if not (location_products_qs := cache.get(code, None)):
             location_products_qs = location.product_location.all()
-            cache.set(code, location_products_qs, 30)
+            cache.set(code, location_products_qs, 300)
         product_qs = perform_product_filtering(self, location_products_qs)
         result['products'] = ProductMenuSerializer(product_qs, many=True).data
         return Response(result, status=status.HTTP_200_OK)

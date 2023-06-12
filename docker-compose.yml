@@ -47,7 +47,7 @@ services:
       context: .
       dockerfile: Docker/Redis/Dockerfile
     ports:
-      - "6379:6379"
+      - 6379:6379
 
 volumes:
   postgres_data:

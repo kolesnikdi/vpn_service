@@ -1,3 +1,8 @@
+"""
+To use Redis db directly without cache app
+Redis.instance
+"""
+
 from django.conf import settings
 
 import redis

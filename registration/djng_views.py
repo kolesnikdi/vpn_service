@@ -4,7 +4,6 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.db.utils import IntegrityError
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.signals import user_logged_in
 from knox.models import AuthToken
 
 from registration.business_logic import final_send_mail, final_creation
@@ -58,7 +57,6 @@ def django_register_confirm_function(request, code):
                     return HttpResponseBadRequest('Check the entered data for uniqueness')
                 user = WebMenuUser.objects.get(email=reg_try.email)
                 token = AuthToken.objects.create(user)[1]
-                # user_logged_in.send(sender=user.__class__, request=request, user=user) # todo мабуть не треба
                 messages.success(request, 'You create user successful.\n'
                                           f'Token {token}')
                 return render(request, 'registration_data.html', status=201)
