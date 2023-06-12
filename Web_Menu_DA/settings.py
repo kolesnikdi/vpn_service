@@ -206,6 +206,11 @@ CACHES = {
         'KEY_PREFIX': 'webmenu_redis_cache',
     },
 }
+CACHE_TIMEOUT = {
+    'LocationMenuView': {
+        'decorator': 60 * 5,
+        'functional': 60 * 2 * 2, }
+}
 
 """
 Redis settings to use Redis db directly. redis_app/redis_app.py
