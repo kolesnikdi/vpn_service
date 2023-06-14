@@ -1,4 +1,8 @@
+from django.shortcuts import redirect
+from django.urls import reverse
 from rest_framework import permissions, exceptions
+
+from registration.djng_views import DjangoRegisterTryView
 
 
 class IsOwnerOr404(permissions.BasePermission):
@@ -42,14 +46,32 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
         )
 
 
-# class IsPostIdExists(permissions.BasePermission):
-#     """
-#     Permission that check if blog_id exist. If post(blog_id) exist returns True and if not Rises 404 exception.
-#     Due to this permission we may not make such check in views.
-#     """
-#
-#     def has_permission(self, request, view):
-#         post = Post.objects.filter(id=view.kwargs['id'])
-#         if not post:
-#             raise exceptions.NotFound()
-#         return True
+ALLOWED_METHODS = ('GET', 'OPTIONS', 'HEAD', 'DELETE')
+REDIRECT_METHODS = ('POST', 'PUT', 'PATCH', 'DELETE')
+
+class TwoFactorAuthenticationOrRedirect(permissions.BasePermission):
+    # """
+    # """
+    def has_permission(self, request, view):
+        if request.method in ALLOWED_METHODS:
+            return True
+        #     # raise exceptions.NotFound()
+        if request.method in REDIRECT_METHODS:
+            import webbrowser
+            ss = webbrowser.open_new_tab('http://127.0.0.1:8000/registration/djangofunction')
+            # reverse('djangofunction')
+            # DjangoRegisterTryView().as_view()
+            # yy = DjangoRegisterTryView()
+            # redirect('company')
+            # raise exceptions.NotFound()
+            return True
+        return True
+
+
+"""Don't catche 'POST' """
+    # def has_object_permission(self, request, view, obj):
+    #     return True
+
+
+
+

@@ -21,7 +21,7 @@ class LocationMenuView(generics.RetrieveAPIView):
     search_fields = ['name', 'description']
     ordering_fields = ['name', 'cost', 'volume']
 
-    # @method_decorator(cache_page(TIMEOUT['decorator'))
+    # @method_decorator(cache_page(TIMEOUT['decorator']))
     def retrieve(self, request, *args, **kwargs):
         """
         Two options for cache operation:
