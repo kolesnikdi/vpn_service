@@ -14,6 +14,7 @@ services:
       - Docker/.env.docker
     depends_on:
       - db
+      - redis_app
   db:
 #    image: postgres:13   # to start db without Dockerfile. disable next 3 rows
     build:
@@ -40,6 +41,13 @@ services:
       - db
     ports:
       - 8081:8080
+
+  redis_app:
+    build:
+      context: .
+      dockerfile: Docker/Redis/Dockerfile
+    ports:
+      - 6379:6379
 
 volumes:
   postgres_data:
