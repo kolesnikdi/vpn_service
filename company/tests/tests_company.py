@@ -55,6 +55,7 @@ class TestCreateCompanyView:
         company_data = randomizer.company_data()
         company_data['password'] = authenticated_client_2_pass.user.user_password
         response = authenticated_client_2_pass.post(reverse('company_new-list'), data=company_data, format='json')
+        # response = authenticated_client_2_pass.get(reverse('company_new-list'), format='json')
         assert response.json()
         assert response.status_code == status.HTTP_201_CREATED
         for_check_create_company = Company.objects.get(owner_id=authenticated_client_2_pass.user.id)

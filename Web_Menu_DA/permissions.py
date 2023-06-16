@@ -49,16 +49,27 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
 ALLOWED_METHODS = ('GET', 'OPTIONS', 'HEAD', 'DELETE')
 REDIRECT_METHODS = ('POST', 'PUT', 'PATCH', 'DELETE')
 
-class TwoFactorAuthenticationOrRedirect(permissions.BasePermission):
+class TwoFactorAuthenticationOrRedirect(permissions.BasePermission):    #todo delete
     # """
     # """
     def has_permission(self, request, view):
         if request.method in ALLOWED_METHODS:
             return True
-        #     # raise exceptions.NotFound()
         if request.method in REDIRECT_METHODS:
+            """code, uuid4 = write_2fa_data_in cache()"""
+            """send_2FA('email', code, request.user)"""
+            """http://127.0.0.1:8000/verification/<uuid4>"""
+            """Абстракція яка запускає url і повертає response (200 чи 404) від post"""
+            """ЧИ"""
+            """Абстракція яка кожні 0,5 секунд перевіряє cash"""
+            # import urllib
+            # urllib.urlopen('http://example.com')
+            # import os
+            # rr = os.system("start \"\" https://example.com")
             import webbrowser
-            ss = webbrowser.open_new_tab('http://127.0.0.1:8000/registration/djangofunction')
+            ss = webbrowser.open('http://127.0.0.1:8000/registration/djangofunction', new=0)
+            import requests
+            # r = requests.post('http://127.0.0.1:8000/registration/djangofunction')
             # reverse('djangofunction')
             # DjangoRegisterTryView().as_view()
             # yy = DjangoRegisterTryView()
@@ -66,12 +77,3 @@ class TwoFactorAuthenticationOrRedirect(permissions.BasePermission):
             # raise exceptions.NotFound()
             return True
         return True
-
-
-"""Don't catche 'POST' """
-    # def has_object_permission(self, request, view, obj):
-    #     return True
-
-
-
-

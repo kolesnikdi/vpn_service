@@ -2,9 +2,9 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from Web_Menu_DA.custom_utils import http_methods_for_2fa
 from company.serializers import CreateCompanySerializer, CompanySerializer
-from Web_Menu_DA.permissions import IsOwnerOr404, TwoFactorAuthenticationOrRedirect
+from Web_Menu_DA.permissions import IsOwnerOr404
+# from Web_Menu_DA.permissions import IsOwnerOr404, TwoFactorAuthenticationOrRedirect
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -17,15 +17,10 @@ class CompanyViewSet(viewsets.ModelViewSet):
         return self.request.user.company.all().order_by('id')
 
 
-# @http_methods_for_2fa(["POST"])
 class CreateCompanyView(viewsets.ModelViewSet):
     serializer_class = CreateCompanySerializer
-    # permission_classes = [IsAuthenticated, IsOwnerOr404]
-    permission_classes = [IsAuthenticated, IsOwnerOr404, TwoFactorAuthenticationOrRedirect]
-
-    @http_methods_for_2fa(["POST"])
-    def create(self, request, *args, **kwargs):
-        super().create(request, *args, **kwargs)
+    permission_classes = [IsAuthenticated, IsOwnerOr404]
+    # permission_classes = [IsAuthenticated, IsOwnerOr404, TwoFactorAuthenticationOrRedirect] #todo delete
 
 
     def get_queryset(self):
