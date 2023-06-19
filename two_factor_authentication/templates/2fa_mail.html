@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <article class="post">
+        <h2>Dear User</h2>
+        <p>Please enter this code <b><a href="{{ code_2fa }}"></a></b> In a new window that opens in your browser.</p>
+        <h3>If you did not request this code, then ignore this letter</h3>
+    </article>
+{% endblock %}

@@ -11,8 +11,7 @@ while ! nc -z $POSTGRES_HOST $POSTGRES_PORT;
 echo "PostgreSQL started"
 python manage.py migrate
 echo "WEB: Migrations process done ..."
-echo "\n"
-
+echo " "
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "++                                                                                ++"

@@ -11,9 +11,10 @@ from location.models import Location
 from menu.filters import CustomSearchFilter, CustomRangeFilter, perform_product_filtering
 from menu.serializers import LocationMenuSerializer, ProductMenuSerializer
 
-
 TIMEOUT = CACHE_TIMEOUT.get('LocationMenuView')
 
+
+@method_decorator(cache_page(TIMEOUT['decorator']), name='retrieve')
 class LocationMenuView(generics.RetrieveAPIView):
     PRODUCT_FILTER_BACKENDS = [CustomSearchFilter, CustomRangeFilter, filters.OrderingFilter, DjangoFilterBackend]
     """fields from Product model for search on Product level"""
@@ -21,12 +22,12 @@ class LocationMenuView(generics.RetrieveAPIView):
     search_fields = ['name', 'description']
     ordering_fields = ['name', 'cost', 'volume']
 
-    @method_decorator(cache_page(TIMEOUT['decorator']))
+    # @method_decorator(cache_page(TIMEOUT['decorator']))
     def retrieve(self, request, *args, **kwargs):
         """
         Two options for cache operation:
-        1. Using a decorator (full page will be cached). Activate lines 24 and 37
-        2. Using standard methods. Cache the DB request. Activate lines 38,39,40
+        1. Using a decorator (full page will be cached). Activate lines 17 or (25) and 38
+        2. Using standard methods. Cache the DB request. Activate lines 39,40,41
         and deactivate lines 21 and 34
         """
         if not (code := self.kwargs.get('code', None)):

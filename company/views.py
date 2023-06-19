@@ -2,14 +2,21 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from Web_Menu_DA.settings import CACHE_TIMEOUT
 from company.serializers import CreateCompanySerializer, CompanySerializer
 from Web_Menu_DA.permissions import IsOwnerOr404
-# from Web_Menu_DA.permissions import IsOwnerOr404, TwoFactorAuthenticationOrRedirect
 
+from two_factor_authentication.business_logic import enabled_2fa
+
+COMPANY_VIEW_TIMEOUT = CACHE_TIMEOUT.get('CompanyViewSet')
 
 class CompanyViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOr404]
     serializer_class = CompanySerializer
+
+    @enabled_2fa(COMPANY_VIEW_TIMEOUT)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def get_queryset(self):
         # add .order_by('id') to improve UnorderedObjectListWarning: Pagination may yield inconsistent results with
@@ -20,8 +27,6 @@ class CompanyViewSet(viewsets.ModelViewSet):
 class CreateCompanyView(viewsets.ModelViewSet):
     serializer_class = CreateCompanySerializer
     permission_classes = [IsAuthenticated, IsOwnerOr404]
-    # permission_classes = [IsAuthenticated, IsOwnerOr404, TwoFactorAuthenticationOrRedirect] #todo delete
-
 
     def get_queryset(self):
         return self.request.user.company.all().order_by('id')

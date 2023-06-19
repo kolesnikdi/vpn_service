@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'image',
     'product',
     'menu',
+    'two_factor_authentication',
 
     # 'client',
     # 'manager',
@@ -68,7 +69,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'Web_Menu_DA.custom_middleware.CustomMiddleware',
 ]
 
 ROOT_URLCONF = 'Web_Menu_DA.urls'
@@ -200,6 +200,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://redis_app:6379/1',
+        'LOCATION': 'redis://localhost:6379/1',     # need for work on local machine (menu view)
         'TIMEOUT': 300,  # default timeout for all chash
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
@@ -210,7 +211,11 @@ CACHES = {
 CACHE_TIMEOUT = {
     'LocationMenuView': {
         'decorator': 60 * 5,
-        'functional': 60 * 2 * 2, }
+        'functional': 60 * 2 * 2, },
+    'CompanyViewSet': {
+        '2fa': 60 * 5,
+    }
+
 }
 
 """
