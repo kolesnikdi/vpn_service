@@ -199,7 +199,7 @@ SWAGGER_SETTINGS = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis_app:6379/1',
+        # 'LOCATION': 'redis://redis_app:6379/1',
         'LOCATION': 'redis://localhost:6379/1',     # need for work on local machine (menu view)
         'TIMEOUT': 300,  # default timeout for all chash
         'OPTIONS': {
@@ -218,8 +218,7 @@ CACHE_TIMEOUT = {
 }
 
 CACHE_TIMEOUT_2FA = {
-    'email':  60 * 5,
-    'google':  60 * 5,
+    'Email':  60 * 5,
 }
 
 """

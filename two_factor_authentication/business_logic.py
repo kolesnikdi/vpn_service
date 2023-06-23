@@ -20,13 +20,6 @@ from rest_framework.response import Response
 from Web_Menu_DA.settings import CACHE_TIMEOUT_2FA
 
 
-# class AUTH2TYPES(enum.IntEnum): # MOVE IT INTO USER CONSTANTS # todo when implement Google Auth/ move it to constants
-#     NONE = 0
-#     EMAIL = 1
-#     SMS = 2
-#     GAUTH = 3
-
-
 def enabled_2fa():
     def decorator(func):
         @wraps(func)
@@ -95,18 +88,19 @@ class Base2FA:
 
 class Cache2FA(Base2FA):
     """This class is intended for followers that use the cache to write 2fa code """
+    cache_delay = 300
 
     @classmethod
     def cache_set(cls, user):
         code_2fa = ''.join(random.choices('123456789', k=6))
-        # cache.set(user.id, {'code': code_2fa}, CACHE_TIMEOUT_2FA.get(user.type_2fa))
-        cache.set(user.id, {'code': code_2fa}, CACHE_TIMEOUT_2FA.get('email'))
+        cache.set(user.id, {'code': code_2fa}, cls.cache_delay)
         return code_2fa
 
 
 class Auth2FAEmail(Cache2FA):
     """Class which uses Email for checking or performing Two-factor verification"""
     auth2fa_type = 'Email'
+    cache_delay = CACHE_TIMEOUT_2FA.get(auth2fa_type)
 
     @classmethod
     def _perform_2fa(cls, user):
@@ -121,7 +115,6 @@ class Auth2FAEmail(Cache2FA):
         context = {
             'code_2fa': f'{code_2fa}',
         }
-
         confirmation_email = {
             'subject': 'Personal code for Two-Factor Authentication',
             'message': 'Personal code for Two-Factor Authentication',

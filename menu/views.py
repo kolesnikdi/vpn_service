@@ -13,8 +13,8 @@ from menu.serializers import LocationMenuSerializer, ProductMenuSerializer
 
 TIMEOUT = CACHE_TIMEOUT.get('LocationMenuView')
 
-
-@method_decorator(cache_page(TIMEOUT['decorator']), name='retrieve')
+#  it's able to use decorator for class with method name as parameter
+# @method_decorator(cache_page(TIMEOUT['decorator']), name='retrieve')
 class LocationMenuView(generics.RetrieveAPIView):
     PRODUCT_FILTER_BACKENDS = [CustomSearchFilter, CustomRangeFilter, filters.OrderingFilter, DjangoFilterBackend]
     """fields from Product model for search on Product level"""
@@ -22,7 +22,7 @@ class LocationMenuView(generics.RetrieveAPIView):
     search_fields = ['name', 'description']
     ordering_fields = ['name', 'cost', 'volume']
 
-    # @method_decorator(cache_page(TIMEOUT['decorator']))
+    @method_decorator(cache_page(TIMEOUT['decorator']))
     def retrieve(self, request, *args, **kwargs):
         """
         Two options for cache operation:

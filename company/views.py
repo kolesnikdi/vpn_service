@@ -2,7 +2,6 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from Web_Menu_DA.settings import CACHE_TIMEOUT
 from company.serializers import CreateCompanySerializer, CompanySerializer
 from Web_Menu_DA.permissions import IsOwnerOr404
 
@@ -13,7 +12,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOr404]
     serializer_class = CompanySerializer
 
-    @enabled_2fa()  # reqieride = True
+    @enabled_2fa()
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
