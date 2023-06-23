@@ -17,11 +17,11 @@ def final_send_mail(reg_try):
     registration_mail = {
         'subject': 'Web_Menu_DA registration',
         'message': 'Web_Menu_DA registration',
-        'from_email': os.environ.get('auth_user', 'segareta@ukr.net'),
+        'from_email': os.environ.get('auth_user'),
         'recipient_list': [reg_try.email],
         'fail_silently': False,
-        'auth_user': os.environ.get('auth_user', 'segareta@ukr.net'),
-        'auth_password': os.environ.get('email_token', 'Y32RepfABOJMYyui'),
+        'auth_user': os.environ.get('auth_user'),
+        'auth_password': os.environ.get('email_token'),
         'html_message': render_to_string('registration_mail.html', context=context),
     }
     send_mail(**registration_mail)

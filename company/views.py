@@ -8,13 +8,12 @@ from Web_Menu_DA.permissions import IsOwnerOr404
 
 from two_factor_authentication.business_logic import enabled_2fa
 
-COMPANY_VIEW_TIMEOUT = CACHE_TIMEOUT.get('CompanyViewSet')
 
 class CompanyViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOr404]
     serializer_class = CompanySerializer
 
-    @enabled_2fa(COMPANY_VIEW_TIMEOUT)
+    @enabled_2fa()  # reqieride = True
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 

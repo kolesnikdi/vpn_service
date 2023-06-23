@@ -215,7 +215,11 @@ CACHE_TIMEOUT = {
     'CompanyViewSet': {
         '2fa': 60 * 5,
     }
+}
 
+CACHE_TIMEOUT_2FA = {
+    'email':  60 * 5,
+    'google':  60 * 5,
 }
 
 """
