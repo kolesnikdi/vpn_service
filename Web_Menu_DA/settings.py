@@ -1,4 +1,5 @@
 import os
+import logging
 from dotenv import load_dotenv  # need for correct work os.environ.get()
 
 from pathlib import Path
@@ -153,7 +154,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), # KNOX settings
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),    # KNOX settings
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
@@ -212,9 +213,6 @@ CACHE_TIMEOUT = {
     'LocationMenuView': {
         'decorator': 60 * 5,
         'functional': 60 * 2 * 2, },
-    'CompanyViewSet': {
-        '2fa': 60 * 5,
-    }
 }
 
 CACHE_TIMEOUT_2FA = {
@@ -227,3 +225,10 @@ Redis settings to use Redis db directly. redis_app/redis_app.py
 REDIS_HOST = 'redis_app'
 REDIS_PORT = 6379
 REDIS_DB = 1
+
+# logging settings
+logging.basicConfig(
+    level=logging.WARNING,
+    filename="system_errors.log",
+    format="%(asctime)s %(levelname)s %(message)s",
+)

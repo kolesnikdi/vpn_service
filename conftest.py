@@ -176,6 +176,16 @@ def authenticated_client_2_pass(another_user_pass):
     return api_client
 
 
+@pytest.fixture(scope='function')
+def authenticated_client_email_2fa(api_client, my_user_pass):
+    my_user_pass.type_2fa = 1
+    my_user_pass.save()
+    api_client.user_token = AuthToken.objects.create(my_user_pass)[1]
+    api_client.user = my_user_pass
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
+    return api_client
+
+
 """fixture for registration app"""
 
 

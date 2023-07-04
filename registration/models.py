@@ -2,6 +2,8 @@ import uuid
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+
+from Web_Menu_DA.constants import Types2FA
 from registration.managers import CustomUserManager
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -12,6 +14,7 @@ class RegistrationTry(models.Model):
     code = models.UUIDField(db_index=True, default=uuid.uuid4)
     creation_time = models.DateTimeField(auto_now=True)
     confirmation_time = models.DateTimeField(null=True)
+
 
 class WebMenuUser(AbstractBaseUser, PermissionsMixin):
 
@@ -36,6 +39,7 @@ class WebMenuUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField('staff status', default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)
+    type_2fa = models.PositiveSmallIntegerField(choices=Types2FA.choices, default=Types2FA.DISABLED)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -44,4 +48,3 @@ class WebMenuUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-

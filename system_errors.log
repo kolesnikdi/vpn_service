@@ -1,0 +1,419 @@
+2023-07-03 15:31:13,810 INFO Watching for file changes with StatReloader
+2023-07-03 15:33:58,132 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\type_2fa_mechanics.py changed, reloading.
+2023-07-03 15:33:59,026 INFO Watching for file changes with StatReloader
+2023-07-03 15:34:29,220 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\type_2fa_mechanics.py changed, reloading.
+2023-07-03 15:34:30,397 INFO Watching for file changes with StatReloader
+2023-07-03 15:36:49,221 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\type_2fa_mechanics.py changed, reloading.
+2023-07-03 15:36:50,078 INFO Watching for file changes with StatReloader
+2023-07-03 15:45:17,089 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\type_2fa_mechanics.py changed, reloading.
+2023-07-03 15:45:17,999 INFO Watching for file changes with StatReloader
+2023-07-03 16:07:41,651 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 16:07:42,828 INFO Watching for file changes with StatReloader
+2023-07-03 16:08:32,172 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 16:08:33,180 INFO Watching for file changes with StatReloader
+2023-07-03 16:19:02,973 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 16:19:03,957 INFO Watching for file changes with StatReloader
+2023-07-03 16:44:19,394 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 16:44:20,588 INFO Watching for file changes with StatReloader
+2023-07-03 16:49:35,730 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-03 16:49:36,751 INFO Watching for file changes with StatReloader
+2023-07-03 16:54:52,652 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-03 16:54:53,592 INFO Watching for file changes with StatReloader
+2023-07-03 16:57:57,278 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 16:57:58,233 INFO Watching for file changes with StatReloader
+2023-07-03 17:08:27,648 WARNING Unauthorized: /enable2fa/
+2023-07-03 17:08:42,816 WARNING Unauthorized: /enable2fa/
+2023-07-03 17:08:43,079 WARNING Not Found: /img/grid.png
+2023-07-03 17:08:48,539 WARNING Unauthorized: /enable2fa/
+2023-07-03 17:08:48,711 WARNING Not Found: /img/grid.png
+2023-07-03 17:08:48,743 WARNING Not Found: /favicon.ico
+2023-07-03 17:08:55,329 WARNING Unauthorized: /enable2fa/
+2023-07-03 17:08:55,477 WARNING Not Found: /img/grid.png
+2023-07-03 17:08:55,524 WARNING Not Found: /favicon.ico
+2023-07-03 17:09:27,813 WARNING Unauthorized: /registration/login/
+2023-07-03 17:09:28,025 WARNING Not Found: /registration/img/grid.png
+2023-07-03 17:09:44,003 WARNING Unauthorized: /registration/login/
+2023-07-03 17:09:44,191 WARNING Not Found: /registration/img/grid.png
+2023-07-03 17:09:44,207 WARNING Not Found: /favicon.ico
+2023-07-03 17:09:53,276 WARNING Not Found: /registration/img/grid.png
+2023-07-03 17:09:53,306 WARNING Not Found: /favicon.ico
+2023-07-03 17:10:06,228 WARNING Method Not Allowed: /enable2fa/
+2023-07-03 17:10:06,397 WARNING Not Found: /img/grid.png
+2023-07-03 17:10:06,417 WARNING Not Found: /favicon.ico
+2023-07-03 17:10:11,422 WARNING Not Found: /img/grid.png
+2023-07-03 17:10:17,874 WARNING Not Found: /img/grid.png
+2023-07-03 17:10:17,900 WARNING Not Found: /favicon.ico
+2023-07-03 17:12:39,277 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 17:12:40,578 INFO Watching for file changes with StatReloader
+2023-07-03 17:12:43,243 WARNING Not Found: /img/grid.png
+2023-07-03 17:12:48,292 WARNING Not Found: /img/grid.png
+2023-07-03 17:12:48,308 WARNING Not Found: /favicon.ico
+2023-07-03 17:13:04,706 WARNING Not Found: /img/grid.png
+2023-07-03 17:13:04,742 WARNING Not Found: /favicon.ico
+2023-07-03 17:15:15,555 WARNING Bad Request: /enable2fa/
+2023-07-03 17:15:15,713 WARNING Not Found: /img/grid.png
+2023-07-03 17:15:15,744 WARNING Not Found: /favicon.ico
+2023-07-03 17:15:41,139 WARNING Bad Request: /enable2fa/
+2023-07-03 17:15:41,280 WARNING Not Found: /img/grid.png
+2023-07-03 17:15:41,312 WARNING Not Found: /favicon.ico
+2023-07-03 17:15:48,340 WARNING Not Found: /img/grid.png
+2023-07-03 17:15:48,371 WARNING Not Found: /favicon.ico
+2023-07-03 17:18:13,304 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-03 17:18:14,197 INFO Watching for file changes with StatReloader
+2023-07-03 17:28:15,267 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-03 17:28:16,169 INFO Watching for file changes with StatReloader
+2023-07-03 17:35:51,101 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 17:35:52,040 INFO Watching for file changes with StatReloader
+2023-07-03 17:36:36,016 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-03 17:36:36,973 INFO Watching for file changes with StatReloader
+2023-07-03 17:37:34,619 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 17:37:35,592 INFO Watching for file changes with StatReloader
+2023-07-03 17:38:53,304 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-03 17:38:54,293 INFO Watching for file changes with StatReloader
+2023-07-03 17:45:23,130 WARNING Not Found: /img/grid.png
+2023-07-03 17:45:23,161 WARNING Not Found: /favicon.ico
+2023-07-03 17:45:36,155 WARNING Not Found: /img/grid.png
+2023-07-03 17:45:36,186 WARNING Not Found: /favicon.ico
+2023-07-03 17:46:19,140 WARNING Not Found: /img/grid.png
+2023-07-03 17:46:22,861 WARNING Bad Request: /company/
+2023-07-03 17:46:23,002 WARNING Not Found: /img/grid.png
+2023-07-03 17:46:23,033 WARNING Not Found: /favicon.ico
+2023-07-03 17:52:09,242 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 17:52:10,121 INFO Watching for file changes with StatReloader
+2023-07-03 17:52:14,034 WARNING Not Found: /img/grid.png
+2023-07-03 17:52:14,065 WARNING Not Found: /favicon.ico
+2023-07-03 17:52:18,858 WARNING Bad Request: /enable2fa/
+2023-07-03 17:52:18,989 WARNING Not Found: /img/grid.png
+2023-07-03 17:52:19,014 WARNING Not Found: /favicon.ico
+2023-07-03 17:52:25,371 WARNING Bad Request: /enable2fa/
+2023-07-03 17:52:25,508 WARNING Not Found: /img/grid.png
+2023-07-03 17:52:25,528 WARNING Not Found: /favicon.ico
+2023-07-03 17:52:38,428 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 17:52:39,248 INFO Watching for file changes with StatReloader
+2023-07-03 17:52:45,119 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 17:52:45,904 INFO Watching for file changes with StatReloader
+2023-07-03 17:52:55,484 WARNING Method Not Allowed: /enable2fa/
+2023-07-03 17:52:55,641 WARNING Not Found: /favicon.ico
+2023-07-03 17:52:55,641 WARNING Not Found: /img/grid.png
+2023-07-03 17:52:58,613 WARNING Bad Request: /enable2fa/
+2023-07-03 17:52:58,738 WARNING Not Found: /img/grid.png
+2023-07-03 17:52:58,770 WARNING Not Found: /favicon.ico
+2023-07-03 18:45:42,288 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 18:45:43,260 INFO Watching for file changes with StatReloader
+2023-07-03 18:46:29,434 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 18:46:30,407 INFO Watching for file changes with StatReloader
+2023-07-03 18:47:16,610 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\serializers.py changed, reloading.
+2023-07-03 18:47:17,553 INFO Watching for file changes with StatReloader
+2023-07-03 19:05:43,065 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\urls.py changed, reloading.
+2023-07-03 19:05:44,135 INFO Watching for file changes with StatReloader
+2023-07-03 19:06:49,549 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\urls.py changed, reloading.
+2023-07-03 19:06:50,650 INFO Watching for file changes with StatReloader
+2023-07-03 19:09:01,129 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\urls.py changed, reloading.
+2023-07-03 19:09:02,093 INFO Watching for file changes with StatReloader
+2023-07-03 19:09:52,690 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\urls.py changed, reloading.
+2023-07-03 19:09:53,474 INFO Watching for file changes with StatReloader
+2023-07-03 19:10:09,591 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 19:10:10,406 INFO Watching for file changes with StatReloader
+2023-07-03 19:45:16,222 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 19:45:17,728 INFO Watching for file changes with StatReloader
+2023-07-03 19:47:49,373 WARNING Unauthorized: /company/
+2023-07-03 19:47:49,640 WARNING Not Found: /img/grid.png
+2023-07-03 19:47:55,260 WARNING Not Found: /img/grid.png
+2023-07-03 19:48:01,948 WARNING Not Found: /img/grid.png
+2023-07-03 19:48:28,378 WARNING Bad Request: /company/
+2023-07-03 19:48:28,522 WARNING Not Found: /img/grid.png
+2023-07-03 21:10:46,156 INFO Watching for file changes with StatReloader
+2023-07-03 21:10:48,665 WARNING Not Found: /
+2023-07-03 21:11:06,768 ERROR Internal Server Error: /enable2fa/display_qr
+Traceback (most recent call last):
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\views\decorators\http.py", line 43, in inner
+    return func(request, *args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py", line 32, in display_qr_view
+    factory = qrcode.image.otp_base32.QrImage
+AttributeError: module 'qrcode.image' has no attribute 'otp_base32'
+2023-07-03 21:13:43,791 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:13:44,716 INFO Watching for file changes with StatReloader
+2023-07-03 21:14:07,606 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:14:08,628 INFO Watching for file changes with StatReloader
+2023-07-03 21:14:35,220 ERROR Internal Server Error: /enable2fa/display_qr
+Traceback (most recent call last):
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\views\decorators\http.py", line 43, in inner
+    return func(request, *args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py", line 42, in display_qr_view
+    return render(request, "index.html", context=context)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: index.html
+2023-07-03 21:14:35,314 WARNING Not Found: /favicon.ico
+2023-07-03 21:15:13,020 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:15:13,898 INFO Watching for file changes with StatReloader
+2023-07-03 21:15:58,922 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:15:59,942 INFO Watching for file changes with StatReloader
+2023-07-03 21:16:00,636 WARNING Not Found: /favicon.ico
+2023-07-03 21:17:04,976 WARNING Not Found: /favicon.ico
+2023-07-03 21:17:31,202 WARNING Not Found: /favicon.ico
+2023-07-03 21:17:58,714 WARNING Not Found: /img/grid.png
+2023-07-03 21:18:00,046 WARNING Not Found: /img/grid.png
+2023-07-03 21:18:42,232 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:18:43,502 INFO Watching for file changes with StatReloader
+2023-07-03 21:18:56,640 WARNING Not Found: /img/grid.png
+2023-07-03 21:21:14,868 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:21:15,951 INFO Watching for file changes with StatReloader
+2023-07-03 21:22:10,345 WARNING Method Not Allowed (POST): /enable2fa/display_qr
+2023-07-03 21:45:08,563 WARNING Unauthorized: /enable2fa/
+2023-07-03 21:45:08,814 WARNING Not Found: /img/grid.png
+2023-07-03 21:45:08,830 WARNING Not Found: /favicon.ico
+2023-07-03 21:45:56,769 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:45:58,480 INFO Watching for file changes with StatReloader
+2023-07-03 21:46:07,208 ERROR Internal Server Error: /enable2fa/display_qr
+Traceback (most recent call last):
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\views\decorators\http.py", line 43, in inner
+    return func(request, *args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py", line 39, in display_qr_view
+    'svg': stream.getvalue().decode(),
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x89 in position 0: invalid start byte
+2023-07-03 21:47:32,645 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:47:34,009 INFO Watching for file changes with StatReloader
+2023-07-03 21:49:25,767 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 21:49:26,849 INFO Watching for file changes with StatReloader
+2023-07-03 22:24:25,984 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 22:24:27,440 INFO Watching for file changes with StatReloader
+2023-07-03 22:29:54,486 WARNING Not Found: /favicon.ico
+2023-07-03 22:30:11,643 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 22:30:13,667 INFO Watching for file changes with StatReloader
+2023-07-03 22:30:15,066 WARNING Not Found: /favicon.ico
+2023-07-03 22:30:54,334 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 22:30:55,693 INFO Watching for file changes with StatReloader
+2023-07-03 22:37:32,463 WARNING Not Found: /favicon.ico
+2023-07-03 22:47:44,103 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 22:47:45,813 INFO Watching for file changes with StatReloader
+2023-07-03 22:48:36,373 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 22:48:37,466 INFO Watching for file changes with StatReloader
+2023-07-03 22:49:49,544 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 22:49:50,778 INFO Watching for file changes with StatReloader
+2023-07-03 22:58:20,496 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 22:58:22,427 INFO Watching for file changes with StatReloader
+2023-07-03 22:59:38,677 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 22:59:39,759 INFO Watching for file changes with StatReloader
+2023-07-03 23:00:05,886 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:00:06,920 INFO Watching for file changes with StatReloader
+2023-07-03 23:02:09,246 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:02:10,843 INFO Watching for file changes with StatReloader
+2023-07-03 23:02:13,983 ERROR Internal Server Error: /enable2fa/display_qr
+Traceback (most recent call last):
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\views\decorators\http.py", line 43, in inner
+    return func(request, *args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py", line 52, in display_qr_view
+    file.write(img)
+TypeError: a bytes-like object is required, not 'SvgImage'
+2023-07-03 23:02:34,729 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:02:35,765 INFO Watching for file changes with StatReloader
+2023-07-03 23:05:02,080 WARNING Not Found: /favicon.ico
+2023-07-03 23:05:18,049 WARNING Not Found: /favicon.ico
+2023-07-03 23:05:58,575 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:06:00,108 INFO Watching for file changes with StatReloader
+2023-07-03 23:07:21,632 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:07:23,106 INFO Watching for file changes with StatReloader
+2023-07-03 23:10:28,049 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:10:29,127 INFO Watching for file changes with StatReloader
+2023-07-03 23:11:34,885 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:11:36,133 INFO Watching for file changes with StatReloader
+2023-07-03 23:12:46,191 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:12:47,417 INFO Watching for file changes with StatReloader
+2023-07-03 23:18:38,870 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:18:39,888 INFO Watching for file changes with StatReloader
+2023-07-03 23:23:33,634 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-03 23:23:34,577 INFO Watching for file changes with StatReloader
+2023-07-04 00:05:40,599 WARNING Not Found: /img/grid.png
+2023-07-04 00:05:58,891 WARNING Not Found: /img/grid.png
+2023-07-04 10:32:57,709 WARNING Not Found: /img/grid.png
+2023-07-04 15:07:14,380 WARNING Not Found: /favicon.ico
+2023-07-04 15:12:40,100 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\urls.py changed, reloading.
+2023-07-04 15:12:41,575 INFO Watching for file changes with StatReloader
+2023-07-04 15:13:40,277 WARNING Not Found: /favicon.ico
+2023-07-04 15:14:39,481 WARNING Not Found: /favicon.ico
+2023-07-04 15:14:55,490 WARNING Not Found: /favicon.ico
+2023-07-04 15:15:20,907 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:15:21,864 INFO Watching for file changes with StatReloader
+2023-07-04 15:15:23,168 WARNING Not Found: /favicon.ico
+2023-07-04 15:15:32,187 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:15:33,024 INFO Watching for file changes with StatReloader
+2023-07-04 15:15:33,479 WARNING Not Found: /favicon.ico
+2023-07-04 15:16:20,017 WARNING Not Found: /favicon.ico
+2023-07-04 15:16:33,579 WARNING Not Found: /favicon.ico
+2023-07-04 15:16:36,690 WARNING Not Found: /favicon.ico
+2023-07-04 15:16:46,177 WARNING Not Found: /favicon.ico
+2023-07-04 15:16:52,534 WARNING Not Found: /favicon.ico
+2023-07-04 15:17:32,583 WARNING Not Found: /favicon.ico
+2023-07-04 15:17:49,057 WARNING Not Found: /favicon.ico
+2023-07-04 15:17:57,267 WARNING Not Found: /favicon.ico
+2023-07-04 15:18:03,445 WARNING Not Found: /favicon.ico
+2023-07-04 15:18:22,170 WARNING Not Found: /favicon.ico
+2023-07-04 15:18:33,408 WARNING Not Found: /favicon.ico
+2023-07-04 15:19:11,429 WARNING Not Found: /favicon.ico
+2023-07-04 15:19:24,297 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:19:25,317 INFO Watching for file changes with StatReloader
+2023-07-04 15:19:25,987 WARNING Not Found: /favicon.ico
+2023-07-04 15:19:34,431 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:19:35,263 INFO Watching for file changes with StatReloader
+2023-07-04 15:19:35,671 WARNING Not Found: /favicon.ico
+2023-07-04 15:19:40,303 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:19:41,182 INFO Watching for file changes with StatReloader
+2023-07-04 15:19:41,816 WARNING Not Found: /favicon.ico
+2023-07-04 15:21:05,215 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:21:06,409 INFO Watching for file changes with StatReloader
+2023-07-04 15:30:42,553 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:30:43,510 INFO Watching for file changes with StatReloader
+2023-07-04 15:31:42,417 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:31:43,359 INFO Watching for file changes with StatReloader
+2023-07-04 15:44:02,844 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:44:04,037 INFO Watching for file changes with StatReloader
+2023-07-04 15:47:02,098 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:47:03,008 INFO Watching for file changes with StatReloader
+2023-07-04 15:47:36,921 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:47:37,854 INFO Watching for file changes with StatReloader
+2023-07-04 15:54:47,918 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:54:48,781 INFO Watching for file changes with StatReloader
+2023-07-04 15:55:00,274 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:55:01,263 INFO Watching for file changes with StatReloader
+2023-07-04 15:55:10,414 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 15:55:11,246 INFO Watching for file changes with StatReloader
+2023-07-04 16:01:24,804 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 16:01:25,932 INFO Watching for file changes with StatReloader
+2023-07-04 16:01:42,524 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 16:01:43,466 INFO Watching for file changes with StatReloader
+2023-07-04 16:01:44,015 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:01:47,140 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:02:06,359 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 16:02:07,175 INFO Watching for file changes with StatReloader
+2023-07-04 16:02:07,615 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:02:09,358 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:02:09,436 WARNING Not Found: /favicon.ico
+2023-07-04 16:02:26,572 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:02:26,666 WARNING Not Found: /favicon.ico
+2023-07-04 16:02:28,333 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:02:28,411 WARNING Not Found: /favicon.ico
+2023-07-04 16:02:38,376 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:02:38,476 WARNING Not Found: /favicon.ico
+2023-07-04 16:02:56,225 WARNING Bad Request: /company/
+2023-07-04 16:02:56,428 WARNING Not Found: /img/grid.png
+2023-07-04 16:02:56,475 WARNING Not Found: /favicon.ico
+2023-07-04 16:02:58,260 WARNING Bad Request: /company/
+2023-07-04 16:02:58,405 WARNING Not Found: /img/grid.png
+2023-07-04 16:03:04,262 WARNING Unauthorized: /company/
+2023-07-04 16:03:04,435 WARNING Not Found: /img/grid.png
+2023-07-04 16:03:10,841 WARNING Bad Request: /company/
+2023-07-04 16:03:10,993 WARNING Not Found: /img/grid.png
+2023-07-04 16:03:11,025 WARNING Not Found: /favicon.ico
+2023-07-04 16:03:27,839 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:06:41,926 WARNING Bad Request: /company/
+2023-07-04 16:28:21,752 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 16:28:32,543 INFO Watching for file changes with StatReloader
+2023-07-04 16:28:38,361 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:28:39,091 WARNING Not Found: /favicon.ico
+2023-07-04 16:28:42,703 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 16:28:43,347 WARNING Not Found: /favicon.ico
+2023-07-04 16:29:08,789 WARNING Bad Request: /company/
+2023-07-04 16:29:08,936 WARNING Not Found: /img/grid.png
+2023-07-04 16:32:23,037 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 16:32:24,040 INFO Watching for file changes with StatReloader
+2023-07-04 16:33:20,739 WARNING Not Found: /menu/27424842-0f24-4b43-a7a1-ec7e1dcb4c54/
+2023-07-04 16:37:12,060 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 16:37:12,893 INFO Watching for file changes with StatReloader
+2023-07-04 17:13:00,339 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:13:01,678 INFO Watching for file changes with StatReloader
+2023-07-04 17:31:56,194 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\urls.py changed, reloading.
+2023-07-04 17:31:57,166 INFO Watching for file changes with StatReloader
+2023-07-04 17:33:02,111 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:33:02,943 INFO Watching for file changes with StatReloader
+2023-07-04 17:33:46,772 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:33:47,616 INFO Watching for file changes with StatReloader
+2023-07-04 17:34:08,210 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\urls.py changed, reloading.
+2023-07-04 17:34:09,043 INFO Watching for file changes with StatReloader
+2023-07-04 17:34:43,534 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:34:44,460 INFO Watching for file changes with StatReloader
+2023-07-04 17:35:23,590 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:35:24,704 INFO Watching for file changes with StatReloader
+2023-07-04 17:35:29,977 WARNING Unauthorized: /enable2fa/display_qr_new
+2023-07-04 17:38:05,988 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:38:07,165 INFO Watching for file changes with StatReloader
+2023-07-04 17:39:01,661 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:39:02,550 INFO Watching for file changes with StatReloader
+2023-07-04 17:39:03,152 ERROR Internal Server Error: /enable2fa/display_qr_new
+Traceback (most recent call last):
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py", line 61, in get
+    gauth = get_object_or_404(GoogleAuth, owner=request.user, is_active=True, is_hidden=False)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\shortcuts.py", line 85, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\query.py", line 636, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\query.py", line 1420, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\query.py", line 1438, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\query.py", line 1445, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\sql\query.py", line 1532, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\sql\query.py", line 1562, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\sql\query.py", line 1407, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\sql\query.py", line 1217, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "C:\Users\Silence\PycharmProjects\Web_Menu_DA\venv\lib\site-packages\django\db\models\sql\query.py", line 1709, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_hidden' into field. Choices are: id, is_active, otp_auth_url, otp_base32, owner, owner_id
+2023-07-04 17:39:33,887 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:39:34,782 INFO Watching for file changes with StatReloader
+2023-07-04 17:39:44,065 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:39:44,944 INFO Watching for file changes with StatReloader
+2023-07-04 17:39:45,399 WARNING Not Found: /enable2fa/display_qr_new
+2023-07-04 17:43:11,708 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\views.py changed, reloading.
+2023-07-04 17:43:12,651 INFO Watching for file changes with StatReloader
+2023-07-04 17:45:10,984 WARNING Bad Request: /company/
+2023-07-04 17:45:11,137 WARNING Not Found: /img/grid.png
+2023-07-04 17:45:38,800 WARNING Not Found: /img/grid.png
+2023-07-04 18:05:15,110 WARNING Bad Request: /company/
+2023-07-04 18:05:15,283 WARNING Not Found: /img/grid.png
+2023-07-04 19:08:40,585 INFO Watching for file changes with StatReloader
+2023-07-04 19:08:47,268 WARNING Not Found: /favicon.ico
+2023-07-04 19:09:00,371 WARNING Not Found: /enable2fa/display_qr
+2023-07-04 19:11:34,606 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\Web_Menu_DA\urls.py changed, reloading.
+2023-07-04 19:11:35,501 INFO Watching for file changes with StatReloader

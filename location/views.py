@@ -25,7 +25,7 @@ class CreateLocationView(viewsets.ModelViewSet):
     # check password in all action [post, put] don't work for destroy
     def get_serializer(self, *args, **kwargs):
         context = kwargs.setdefault('context', {})  # if no dict in kwargs we make it
-        # join user to the serializer context for opportunity def validate in CreateCompanySerializer
+        # join user to the serializer context for opportunity def validate in CreateLocationSerializer
         context['user'] = self.request.user
         return super().get_serializer(*args, **kwargs)
 

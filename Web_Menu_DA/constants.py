@@ -6,8 +6,8 @@ class Measures(models.IntegerChoices):    # or class Measures(IntEnum): from enu
     grams = 1
     pieces = 2
 
-# class AUTH2TYPES(enum.IntEnum):   # for WebMenuUser.type_2fa
-#     None = 0
-#     Email = 1
-#     GAUTH = 3
 
+class Types2FA(models.IntegerChoices):
+    DISABLED = 0
+    EMAIL = 1
+    GAUTH = 2
