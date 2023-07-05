@@ -142,7 +142,7 @@ class TestEnable2FAView:
         data_for_check = GoogleAuth.objects.filter(owner_id=authenticated_client.user.id).last()
         assert data_for_check.owner.email == response_json['owner']
         assert data_for_check.otp_auth_url == response_json['otp_auth_url']
-        assert response_json['redirect to'] == f'{settings.HOST}/enable2fa/display_qr'
+        assert response_json['redirect_to'] == f'{settings.HOST}/enable2fa/display_qr'
         assert response.status_code == status.HTTP_200_OK
 
     def test_set_type_gauth_is_active_false(self, authenticated_client):

@@ -225,10 +225,3 @@ Redis settings to use Redis db directly. redis_app/redis_app.py
 REDIS_HOST = 'redis_app'
 REDIS_PORT = 6379
 REDIS_DB = 1
-
-# logging settings
-logging.basicConfig(
-    level=logging.WARNING,
-    filename="system_errors.log",
-    format="%(asctime)s %(levelname)s %(message)s",
-)

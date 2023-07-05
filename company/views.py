@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from company.serializers import CreateCompanySerializer, CompanySerializer
 from Web_Menu_DA.permissions import IsOwnerOr404
 
-from two_factor_authentication.type_2fa_mechanics import enable_2fa
+from two_factor_authentication.business_logic import enable_2fa
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
