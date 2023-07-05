@@ -417,3 +417,25 @@ django.core.exceptions.FieldError: Cannot resolve keyword 'is_hidden' into field
 2023-07-04 19:09:00,371 WARNING Not Found: /enable2fa/display_qr
 2023-07-04 19:11:34,606 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\Web_Menu_DA\urls.py changed, reloading.
 2023-07-04 19:11:35,501 INFO Watching for file changes with StatReloader
+2023-07-05 01:10:33,502 WARNING Unauthorized: /enable2fa/display_qr
+2023-07-05 01:10:33,727 WARNING Not Found: /favicon.ico
+2023-07-05 16:04:25,992 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-05 16:04:27,517 INFO Watching for file changes with StatReloader
+2023-07-05 16:05:24,309 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-05 16:05:25,171 INFO Watching for file changes with StatReloader
+2023-07-05 16:12:11,058 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-05 16:12:12,062 INFO Watching for file changes with StatReloader
+2023-07-05 16:12:26,465 WARNING Not Found: /img/grid.png
+2023-07-05 16:12:36,587 WARNING Unauthorized: /enable2fa/
+2023-07-05 16:12:36,744 WARNING Not Found: /img/grid.png
+2023-07-05 16:12:45,198 WARNING Method Not Allowed: /enable2fa/
+2023-07-05 16:12:45,339 WARNING Not Found: /img/grid.png
+2023-07-05 16:12:53,521 WARNING Bad Request: /enable2fa/
+2023-07-05 16:12:53,662 WARNING Not Found: /img/grid.png
+2023-07-05 16:12:58,690 WARNING Not Found: /img/grid.png
+2023-07-05 16:13:05,792 WARNING Not Found: /img/grid.png
+2023-07-05 16:14:06,961 WARNING Bad Request: /company/
+2023-07-05 16:14:07,196 WARNING Not Found: /img/grid.png
+2023-07-05 16:14:19,701 WARNING Not Found: /img/grid.png
+2023-07-05 16:38:38,829 INFO C:\Users\Silence\PycharmProjects\Web_Menu_DA\Web_Menu_DA\two_factor_authentication\business_logic.py changed, reloading.
+2023-07-05 16:38:39,803 INFO Watching for file changes with StatReloader

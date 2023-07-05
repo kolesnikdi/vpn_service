@@ -2,6 +2,7 @@ import pyotp
 
 from two_factor_authentication.models import GoogleAuth
 from two_factor_authentication.serializers import GoogleAuthSerializer
+from Web_Menu_DA import settings
 from Web_Menu_DA.constants import Types2FA
 
 MSG_TPL = 'Two-factor verification {}'
@@ -27,10 +28,9 @@ def setup_2fa(request_2fa, user):
         new_gauth = GoogleAuth.objects.create(owner_id=user.id, otp_base32=otp_base32, otp_auth_url=otp_auth_url)
         response = GoogleAuthSerializer(instance=new_gauth).data
         response['msg'] = MSG_TPL.format('with your Google successfully enabled.')
-        response['warning'] = f'Write down or make a copy of the token {otp_base32}. You won\'t see it again.'
+        response['redirect to'] = f'{settings.HOST}/enable2fa/display_qr'
         result = response
 
     user.type_2fa = request_2fa
     user.save()
     return result
-
