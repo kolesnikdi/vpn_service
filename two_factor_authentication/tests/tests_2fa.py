@@ -5,9 +5,9 @@ from django.core.cache import cache
 
 from rest_framework import status
 
-from Web_Menu_DA import settings
 from Web_Menu_DA.constants import Types2FA
 from two_factor_authentication.models import GoogleAuth
+from two_factor_authentication.constants import QR_URL
 
 
 class Test2faEmailOnCompanyViewSet:
@@ -142,7 +142,7 @@ class TestEnable2FAView:
         data_for_check = GoogleAuth.objects.filter(owner_id=authenticated_client.user.id).last()
         assert data_for_check.owner.email == response_json['owner']
         assert data_for_check.otp_auth_url == response_json['otp_auth_url']
-        assert response_json['redirect_to'] == f'{settings.HOST}/enable2fa/display_qr'
+        assert response_json['redirect_to'] == QR_URL
         assert response.status_code == status.HTTP_200_OK
 
     def test_set_type_gauth_is_active_false(self, authenticated_client):

@@ -1,5 +1,4 @@
 import os
-import logging
 from dotenv import load_dotenv  # need for correct work os.environ.get()
 
 from pathlib import Path
