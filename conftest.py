@@ -1,5 +1,6 @@
 import datetime
 
+import pyotp
 import pytest
 import random
 import string
@@ -14,7 +15,8 @@ from image.models import Image
 from location.models import Location
 from product.models import Product
 from registration.models import RegistrationTry
-
+from Web_Menu_DA.constants import Types2FA
+from two_factor_authentication.models import GoogleAuth
 
 """randomizers"""
 
@@ -173,6 +175,33 @@ def authenticated_client_2_pass(another_user_pass):
     api_client.user_token = AuthToken.objects.create(another_user_pass)[1]
     api_client.user = another_user_pass
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
+    return api_client
+
+
+@pytest.fixture(scope='function')
+def authenticated_client_email_2fa(api_client, my_user_pass):
+    my_user_pass.type_2fa = Types2FA.EMAIL
+    my_user_pass.save()
+    api_client.user_token = AuthToken.objects.create(my_user_pass)[1]
+    api_client.user = my_user_pass
+    api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
+    return api_client
+
+@pytest.fixture(scope='function')
+def authenticated_client_gauth_2fa(api_client, my_user_pass):
+    my_user_pass.type_2fa = Types2FA.GAUTH
+    my_user_pass.save()
+    otp_base32 = pyotp.random_base32()
+    otp_auth_url = pyotp.totp.TOTP(otp_base32).provisioning_uri(
+        name=my_user_pass.email.lower(),
+        issuer_name="Web_Menu_DA",
+    )
+    GoogleAuth.objects.create(owner_id=my_user_pass.id, otp_base32=otp_base32, otp_auth_url=otp_auth_url)
+    api_client.user = my_user_pass
+    api_client.credentials(
+            HTTP_AUTHORIZATION=f'Token {AuthToken.objects.create(my_user_pass)[1]}',
+            HTTP_2FACODE=pyotp.TOTP(otp_base32).now(),
+    )
     return api_client
 
 

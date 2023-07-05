@@ -25,15 +25,11 @@ class CreateProductView(viewsets.ModelViewSet):
     serializer_class = CreateProductSerializer
     permission_classes = [IsAuthenticated, IsOwnerOr404]    #todo add permission IsManagerOr404
 
-    def destroy(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def get_serializer(self, *args, **kwargs):
         kwargs.setdefault('context', {})  # if no dict in kwargs we make it
         # join user to the serializer context for opportunity def validate in CreateCompanySerializer
         kwargs['context']['user'] = self.request.user
         return super().get_serializer(*args, **kwargs)
-
 
     def get_queryset(self):
         # todo add filter by location

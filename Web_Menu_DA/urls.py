@@ -13,6 +13,7 @@ urlpatterns = [
     path('product/', include('product.urls')),
     path('menu/', include('menu.urls')),
     path('user/', WebMenuUserViewSet.as_view(), name='user'),
+    path('enable2fa/', include('two_factor_authentication.urls')),
 ]
 
 if settings.DEBUG:

@@ -153,7 +153,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), # KNOX settings
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),    # KNOX settings
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
@@ -212,9 +212,6 @@ CACHE_TIMEOUT = {
     'LocationMenuView': {
         'decorator': 60 * 5,
         'functional': 60 * 2 * 2, },
-    'CompanyViewSet': {
-        '2fa': 60 * 5,
-    }
 }
 
 CACHE_TIMEOUT_2FA = {

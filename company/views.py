@@ -5,14 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from company.serializers import CreateCompanySerializer, CompanySerializer
 from Web_Menu_DA.permissions import IsOwnerOr404
 
-from two_factor_authentication.business_logic import enabled_2fa
+from two_factor_authentication.business_logic import enable_2fa
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOr404]
     serializer_class = CompanySerializer
 
-    @enabled_2fa()
+    @enable_2fa()
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
