@@ -57,16 +57,15 @@ Can be executed on any Views method
 It can perform any verification method provided here. Now it (Email, Google Authentication)
 The verification method is set in WebMenuUser.type_2fa
 """
-# Can be switched on forcibly - in development
 
 
-def enable_2fa():
+def enable_2fa(force=False):
     def decorator(func):
         @wraps(func)
         def _decorator(self, request, *args, **kwargs):
             """Checks whether the user is authorised and has Two-factor verification."""
-            if request.user.is_authenticated and request.user.type_2fa != Types2FA.DISABLED:
-                error_response = perform_2fa_request(request)
+            if request.user.is_authenticated:
+                error_response = perform_2fa_request(request, force)
                 if error_response:
                     return error_response
             return func(self, request, *args, **kwargs)
@@ -211,26 +210,28 @@ class Auth2FAGAUTH(Base2FA):
             return cls.not_valid
 
 
-def perform_2fa_request(request):
+def perform_2fa_request(request, force=False):
     """ An Abstraction that defines the type of Two-factor
     verification. Performs primary routing depending on the
     presence of request.header. """
+    default_class = Auth2FAEmail
 
     user = request.user
-    if user.type_2fa == Types2FA.EMAIL:
+    if user.type_2fa == Types2FA.DISABLED:
+        if force:
+            Auth2FAClass = default_class
+        else:
+            # In case if disabled 2fa and if force is False.
+            return
+    elif user.type_2fa == Types2FA.EMAIL:
         Auth2FAClass = Auth2FAEmail
     elif user.type_2fa == Types2FA.GAUTH:
         Auth2FAClass = Auth2FAGAUTH
-    elif user.type_2fa == Types2FA.DISABLED:
-        # In case disabled 2fa.
-        # For cases where we use an abstraction without top-level code or if an error occurs at the top level
-        logger.warning('perform_2fa_request() is not executed in its own environment or'
-                        ' top-level verification Types2FA is disabled')
-        return
     else:
         # in case unknown 2fa type
-        logger.warning('we receive a request with a non-existent Types2FA')
+        logger.critical('we receive a request with a non-existent Types2FA')
         return Base2FA.error_msg
+
     if not (received_code := request.META.get('HTTP_2FACODE', None)):
         return Auth2FAClass.perform_2fa(user)
 

@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 
-from two_factor_authentication.business_logic import setup_2fa
+from two_factor_authentication.business_logic import setup_2fa, enable_2fa
 from two_factor_authentication.models import GoogleAuth
 from two_factor_authentication.serializers import Enable2faSerializer
 
@@ -18,6 +18,7 @@ class Enable2FAView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = Enable2faSerializer
 
+    @enable_2fa(force=True)
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'user': request.user})
         serializer.is_valid(raise_exception=True)
