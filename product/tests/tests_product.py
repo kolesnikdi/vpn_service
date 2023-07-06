@@ -93,8 +93,8 @@ class TestCreateProductView:
 
 
 class TestProductViewSet:
-    def test_product_view_owner(self, authenticated_client_2_pass, custom_product):
-        response = authenticated_client_2_pass.get(reverse('product'), format='json')
+    def test_product_view_owner(self, authenticated_client_2, custom_product):
+        response = authenticated_client_2.get(reverse('product'), format='json')
         response_json = response.json()
         assert response_json
         data = response_json['results'][0]

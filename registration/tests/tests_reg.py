@@ -143,12 +143,12 @@ class TestApiClientView:
 
 class TestKnoxView:
     @pytest.mark.django_db
-    def test_login_valid_data(self, api_client, my_user_pass):
-        AuthToken.objects.filter(user_id=my_user_pass.id).delete()  # delete from db all tokens for user
+    def test_login_valid_data(self, api_client, user):
+        AuthToken.objects.filter(user_id=user.id).delete()  # delete from db all tokens for user
         response = api_client.post(reverse('login'),
                                    data={
-                                       'username': my_user_pass.email,
-                                       'password': my_user_pass.user_password,
+                                       'username': user.email,
+                                       'password': user.user_password,
                                    }, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         resp_json = response.json()
@@ -156,7 +156,7 @@ class TestKnoxView:
         assert set(resp_json['user']) >= set(WebMenuUserSerializer.Meta.fields)
         assert resp_json['token'] is not None
         assert resp_json['expiry'] is not None
-        assert AuthToken.objects.filter(user_id=my_user_pass.id).exists()
+        assert AuthToken.objects.filter(user_id=user.id).exists()
         api_client.credentials(HTTP_AUTHORIZATION=f'Token {resp_json["token"]}')
         response2 = api_client.get(reverse('user'), format='json')
         assert response2.status_code == status.HTTP_200_OK
@@ -181,11 +181,11 @@ class TestKnoxView:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     @pytest.mark.django_db
-    def test_logoutall(self, authenticated_client_2_pass):
-        response = authenticated_client_2_pass.post(reverse('logoutall'), format='json')
+    def test_logoutall(self, authenticated_client_2):
+        response = authenticated_client_2.post(reverse('logoutall'), format='json')
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert not AuthToken.objects.filter(user_id=authenticated_client_2_pass.user.id).exists()
-        response = authenticated_client_2_pass.get(reverse('user'))
+        assert not AuthToken.objects.filter(user_id=authenticated_client_2.user.id).exists()
+        response = authenticated_client_2.get(reverse('user'))
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 class TestDjangoRegistrationFormFunction:

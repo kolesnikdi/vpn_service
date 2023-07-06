@@ -51,13 +51,13 @@ class TestBusinessLogic:
 
 
 class TestCreateCompanyView:
-    def test_create_company_valid(self, authenticated_client_2_pass, randomizer):
+    def test_create_company_valid(self, authenticated_client_2, randomizer):
         company_data = randomizer.company_data()
-        company_data['password'] = authenticated_client_2_pass.user.user_password
-        response = authenticated_client_2_pass.post(reverse('company_new-list'), data=company_data, format='json')
+        company_data['password'] = authenticated_client_2.user.user_password
+        response = authenticated_client_2.post(reverse('company_new-list'), data=company_data, format='json')
         assert response.json()
         assert response.status_code == status.HTTP_201_CREATED
-        for_check_create_company = Company.objects.get(owner_id=authenticated_client_2_pass.user.id)
+        for_check_create_company = Company.objects.get(owner_id=authenticated_client_2.user.id)
         assert for_check_create_company.legal_name == company_data['legal_name']
         assert not bool(for_check_create_company.logo.image)  # true if not False=bool((for_check_create_location.logo)
         assert for_check_create_company.legal_address_id is not None
@@ -79,11 +79,11 @@ class TestCreateCompanyView:
         assert for_check_create_actual_address.house_number == company_data['actual_address']['house_number']
         assert for_check_create_actual_address.flat_number == company_data['actual_address']['flat_number']
 
-    def test_update_company_valid(self, authenticated_client_2_pass, randomizer, custom_company):
+    def test_update_company_valid(self, authenticated_client_2, randomizer, custom_company):
         data = randomizer.company_data()
-        data['password'] = authenticated_client_2_pass.user.user_password
+        data['password'] = authenticated_client_2.user.user_password
         url = reverse('company_new-detail', kwargs={'pk': custom_company.id})
-        response = authenticated_client_2_pass.put(url, data=data, format='json')
+        response = authenticated_client_2.put(url, data=data, format='json')
         assert response.json()
         assert response.status_code == status.HTTP_200_OK
         for_check_create_company = Company.objects.get(id=custom_company.id)
@@ -118,8 +118,8 @@ class TestCreateCompanyView:
 
 
 class TestCompanyViewSet:
-    def test_company_view_owner(self, authenticated_client_2_pass, custom_company):
-        response = authenticated_client_2_pass.get(reverse('company'), format='json')
+    def test_company_view_owner(self, authenticated_client_2, custom_company):
+        response = authenticated_client_2.get(reverse('company'), format='json')
         response_json = response.json()
         data = response_json['results'][0]
         assert response_json

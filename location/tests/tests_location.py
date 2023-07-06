@@ -92,8 +92,8 @@ class TestCreateLocationView:
 
 class TestLocationViewSet:
 
-    def test_location_view_owner(self, authenticated_client_2_pass, custom_location):
-        response = authenticated_client_2_pass.get(reverse('location'), format='json')
+    def test_location_view_owner(self, authenticated_client_2, custom_location):
+        response = authenticated_client_2.get(reverse('location'), format='json')
         response_json = response.json()
         assert response_json
         data = response_json['results'][0]
