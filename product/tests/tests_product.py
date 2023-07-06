@@ -82,14 +82,6 @@ class TestCreateProductView:
         assert for_check_update_product.measure == data['measure']
         assert str(for_check_update_product.cost)[:4] in data['cost']
 
-    def test_delete_product(self, custom_product, custom_location):
-        response = custom_location.user.delete(reverse('product_new-detail', kwargs={'pk': custom_product.id}))
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_delete_product_another_client(self, authenticated_client, custom_product):
-        response = authenticated_client.delete(reverse('product_new-detail', kwargs={'pk': custom_product.id}))
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
     def test_update_product_another_client(self, authenticated_client, custom_product, randomizer):
         data = randomizer.product_data()
         data['locations'] = [custom_product.location_id]

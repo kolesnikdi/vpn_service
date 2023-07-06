@@ -6,6 +6,7 @@ import random
 import string
 
 from django.urls import reverse
+from django.core.cache import cache
 from knox.models import AuthToken
 from rest_framework.test import APIClient
 
@@ -135,15 +136,14 @@ def api_client():
     return APIClient()
 
 
-@pytest.fixture(scope='function')  # todo don't use anywhere
-def my_user(my_user_pass):
-    return my_user_pass[0]
-
-
 @pytest.fixture(scope='function')
 def my_user_pass(django_user_model, randomizer):
     password = randomizer.upp2_data()
-    user = django_user_model.objects.create_user(email=randomizer.email(), password=password)
+    user = django_user_model.objects.create_user(
+        id=randomizer.random_digits_limit(3),
+        email=randomizer.email(),
+        password=password
+    )
     user.user_password = password
     return user
 
@@ -152,6 +152,7 @@ def my_user_pass(django_user_model, randomizer):
 def another_user_pass(django_user_model, randomizer):
     password = randomizer.upp2_data()
     user = django_user_model.objects.create_user(
+        id=randomizer.random_digits_limit(3),
         email=randomizer.email(),
         password=password,
         mobile_phone=randomizer.random_phone(),
@@ -179,13 +180,20 @@ def authenticated_client_2_pass(another_user_pass):
 
 
 @pytest.fixture(scope='function')
-def authenticated_client_email_2fa(api_client, my_user_pass):
+def authenticated_client_email_2fa(api_client, my_user_pass, randomizer):
     my_user_pass.type_2fa = Types2FA.EMAIL
     my_user_pass.save()
+    code = randomizer.random_digits_limit(6)
+    cache.set(my_user_pass.id, {'code': code}, 60)
     api_client.user_token = AuthToken.objects.create(my_user_pass)[1]
     api_client.user = my_user_pass
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
+    api_client.code = code
+    api_client.credentials(
+            HTTP_AUTHORIZATION=f'Token {api_client.user_token}',
+            HTTP_2FACODE=code,
+    )
     return api_client
+
 
 @pytest.fixture(scope='function')
 def authenticated_client_gauth_2fa(api_client, my_user_pass):
@@ -196,8 +204,9 @@ def authenticated_client_gauth_2fa(api_client, my_user_pass):
         name=my_user_pass.email.lower(),
         issuer_name="Web_Menu_DA",
     )
-    GoogleAuth.objects.create(owner_id=my_user_pass.id, otp_base32=otp_base32, otp_auth_url=otp_auth_url)
+    gauth = GoogleAuth.objects.create(owner_id=my_user_pass.id, otp_base32=otp_base32, otp_auth_url=otp_auth_url)
     api_client.user = my_user_pass
+    api_client.gauth = gauth
     api_client.credentials(
             HTTP_AUTHORIZATION=f'Token {AuthToken.objects.create(my_user_pass)[1]}',
             HTTP_2FACODE=pyotp.TOTP(otp_base32).now(),
@@ -251,10 +260,10 @@ def custom_company(authenticated_client_2_pass, randomizer):
 
 
 @pytest.fixture(scope='function')
-def custom_company_2(authenticated_client, randomizer):
+def custom_company_2(my_user_pass, randomizer):
     company_data = randomizer.company_data()
     company = Company.objects.create(
-        owner=authenticated_client.user,
+        owner=my_user_pass,
         logo=Image.objects.create(**company_data['logo']),
         legal_name=company_data['legal_name'],
         legal_address=Address.objects.create(**company_data['legal_address']),
@@ -263,8 +272,8 @@ def custom_company_2(authenticated_client, randomizer):
         phone=company_data['phone'],
         email=company_data['email'],
     )
-    company.user_password = authenticated_client.user.user_password
-    company.user = authenticated_client
+    company.user_password = my_user_pass.user_password
+    company.user = my_user_pass
     return company
 
 
