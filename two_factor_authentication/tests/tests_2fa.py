@@ -10,9 +10,12 @@ from two_factor_authentication.models import GoogleAuth
 from two_factor_authentication.constants import QR_URL
 
 
-class Test2faEmailOnCompanyViewSet:
+class Test2faOnCompanyViewSet:
 
     def test_no_header_in_request_email_2fa(self, authenticated_client_email_2fa):
+        cache.delete(authenticated_client_email_2fa.user.id)
+        authenticated_client_email_2fa.credentials(
+            HTTP_AUTHORIZATION=f'Token {authenticated_client_email_2fa.user_token}')
         response = authenticated_client_email_2fa.get(reverse('company'), format='json')
         response_json = response.json()
         assert response_json
@@ -20,10 +23,10 @@ class Test2faEmailOnCompanyViewSet:
         assert response_json['hint'] == 'Put received code into HTTP_2FACODE header and send request again.'
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_no_header_in_request_gauth_2fa(self, authenticated_client_email_2fa):
-        authenticated_client_email_2fa.user.type_2fa = Types2FA.GAUTH
-        authenticated_client_email_2fa.user.save()
-        response = authenticated_client_email_2fa.get(reverse('company'), format='json')
+    def test_no_header_in_request_gauth_2fa(self, authenticated_client):
+        authenticated_client.user.type_2fa = Types2FA.GAUTH
+        authenticated_client.user.save()
+        response = authenticated_client.get(reverse('company'), format='json')
         response_json = response.json()
         assert response_json
         assert response_json['error'] == '2fa required'
@@ -31,7 +34,6 @@ class Test2faEmailOnCompanyViewSet:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     def test_header_is_not_valid(self, authenticated_client_email_2fa):
-        cache.set(authenticated_client_email_2fa.user.id, {'code': '645987'}, 60)
         authenticated_client_email_2fa.credentials(
             HTTP_AUTHORIZATION=f'Token {authenticated_client_email_2fa.user_token}',
             HTTP_2FACODE='2FACODE',
@@ -43,11 +45,6 @@ class Test2faEmailOnCompanyViewSet:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     def test_header_is_valid(self, authenticated_client_email_2fa, custom_company_2):
-        cache.set(authenticated_client_email_2fa.user.id, {'code': '645987'}, 60)
-        authenticated_client_email_2fa.credentials(
-            HTTP_AUTHORIZATION=f'Token {authenticated_client_email_2fa.user_token}',
-            HTTP_2FACODE='645987',
-        )
         response = authenticated_client_email_2fa.get(reverse('company'), format='json')
         response_json = response.json()
         assert response_json['results']
@@ -55,10 +52,7 @@ class Test2faEmailOnCompanyViewSet:
         assert response.status_code == status.HTTP_200_OK
 
     def test_header_no_cache(self, authenticated_client_email_2fa):
-        authenticated_client_email_2fa.credentials(
-            HTTP_AUTHORIZATION=f'Token {authenticated_client_email_2fa.user_token}',
-            HTTP_2FACODE='2FACODE',
-        )
+        cache.delete(authenticated_client_email_2fa.user.id)
         response = authenticated_client_email_2fa.get(reverse('company'), format='json')
         response_json = response.json()
         assert response_json
@@ -74,7 +68,9 @@ class Test2faEmailOnCompanyViewSet:
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_header_code_unfinished(self, authenticated_client_email_2fa):
-        cache.set(authenticated_client_email_2fa.user.id, {'code': '645987'}, 60)
+        authenticated_client_email_2fa.credentials(
+            HTTP_AUTHORIZATION=f'Token {authenticated_client_email_2fa.user_token}',
+        )
         response = authenticated_client_email_2fa.get(reverse('company'), format='json')
         response_json = response.json()
         assert response_json
@@ -89,43 +85,82 @@ class Test2faEmailOnCompanyViewSet:
         assert response.status_code == status.HTTP_200_OK
 
 
-class TestEnable2FAView:
+class TestEnable2FAViewForce_True:
 
-    def test_set_type_password_incorrect(self, authenticated_client):
+    def test_set_type_password_incorrect(self, authenticated_client_email_2fa):
         data = {'type_2fa': Types2FA.DISABLED, 'password': 'password'}
-        response = authenticated_client.post(reverse('enable2fa'),data=data, format='json')
+        response = authenticated_client_email_2fa.post(reverse('enable2fa'),data=data, format='json')
         response_json = response.json()
         assert response_json
         assert response_json['password'] == ['Password incorrect.']
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_set_incorrect_type(self, authenticated_client):
-        data = {'type_2fa': 4, 'password': authenticated_client.user.user_password}
-        response = authenticated_client.post(reverse('enable2fa'), data=data, format='json')
+    def test_set_incorrect_type(self, authenticated_client_email_2fa):
+        data = {'type_2fa': 4, 'password': authenticated_client_email_2fa.user.user_password}
+        response = authenticated_client_email_2fa.post(reverse('enable2fa'), data=data, format='json')
         response_json = response.json()
         assert response_json
         assert response_json['type_2fa'] == ['"4" is not a valid choice.']
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_set_same_type_as_it_was(self, authenticated_client):
-        data = {'type_2fa': Types2FA.DISABLED, 'password': authenticated_client.user.user_password}
-        response = authenticated_client.post(reverse('enable2fa'), data=data, format='json')
+    def test_set_same_type_as_it_was(self, authenticated_client_email_2fa):
+        data = {'type_2fa': Types2FA.EMAIL, 'password': authenticated_client_email_2fa.user.user_password}
+        response = authenticated_client_email_2fa.post(reverse('enable2fa'), data=data, format='json')
         response_json = response.json()
         assert response_json
         assert response_json['type_2fa'] == ['This Choice has been enabled before.']
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_set_type_disabled(self, authenticated_client):
-        authenticated_client.user.type_2fa = Types2FA.EMAIL
-        authenticated_client.user.save()
-        data = {'type_2fa': Types2FA.DISABLED, 'password': authenticated_client.user.user_password}
-        response = authenticated_client.post(reverse('enable2fa'), data=data, format='json')
+    def test_set_type_disabled(self, authenticated_client_email_2fa):
+        data = {'type_2fa': Types2FA.DISABLED, 'password': authenticated_client_email_2fa.user.user_password}
+        response = authenticated_client_email_2fa.post(reverse('enable2fa'), data=data, format='json')
         response_json = response.json()
         assert response_json
         assert response_json['msg'] == 'Two-factor verification successfully disabled.'
         assert response.status_code == status.HTTP_200_OK
 
-    def test_set_type_email(self, authenticated_client):
+    def test_set_type_email(self, authenticated_client_email_2fa):
+        authenticated_client_email_2fa.user.type_2fa = Types2FA.DISABLED
+        authenticated_client_email_2fa.user.save()
+        data = {'type_2fa': Types2FA.EMAIL, 'password': authenticated_client_email_2fa.user.user_password}
+        response = authenticated_client_email_2fa.post(reverse('enable2fa'), data=data, format='json')
+        response_json = response.json()
+        assert response_json
+        assert response_json['msg'] == 'Two-factor verification with your email successfully enabled'
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_set_type_gauth(self, authenticated_client_email_2fa):
+        data = {'type_2fa': Types2FA.GAUTH, 'password': authenticated_client_email_2fa.user.user_password}
+        response = authenticated_client_email_2fa.post(reverse('enable2fa'), data=data, format='json')
+        response_json = response.json()
+        assert response_json
+        assert response_json['msg'] == 'Two-factor verification with your Google successfully enabled.'
+        data_for_check = GoogleAuth.objects.filter(owner_id=authenticated_client_email_2fa.user.id).last()
+        assert data_for_check.owner.email == response_json['owner']
+        assert data_for_check.otp_auth_url == response_json['otp_auth_url']
+        assert response_json['redirect_to'] == QR_URL
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_set_type_gauth_is_active_false(self, authenticated_client_email_2fa):
+        otp_base32 = pyotp.random_base32()
+        otp_auth_url = pyotp.totp.TOTP(otp_base32).provisioning_uri(
+            name=authenticated_client_email_2fa.user.email.lower(), issuer_name="Web_Menu_DA")
+        data = {'type_2fa': Types2FA.GAUTH, 'password': authenticated_client_email_2fa.user.user_password}
+        data_2fa = GoogleAuth.objects.create(owner_id=authenticated_client_email_2fa.user.id, otp_base32=otp_base32,
+                                             otp_auth_url=otp_auth_url)
+        response = authenticated_client_email_2fa.post(reverse('enable2fa'), data=data, format='json')
+        response_json = response.json()
+        assert response_json
+        data_for_check = GoogleAuth.objects.get(id=data_2fa.id)
+        assert data_for_check.is_active is False
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_force_true_no_set_2fa_type(self, authenticated_client):
+        cache.set(authenticated_client.user.id, {'code': 645375}, 60)
+        authenticated_client.credentials(
+            HTTP_AUTHORIZATION=f'Token {authenticated_client.user_token}',
+            HTTP_2FACODE=645375,
+        )
         data = {'type_2fa': Types2FA.EMAIL, 'password': authenticated_client.user.user_password}
         response = authenticated_client.post(reverse('enable2fa'), data=data, format='json')
         response_json = response.json()
@@ -133,30 +168,12 @@ class TestEnable2FAView:
         assert response_json['msg'] == 'Two-factor verification with your email successfully enabled'
         assert response.status_code == status.HTTP_200_OK
 
-    def test_set_type_gauth(self, authenticated_client):
-        data = {'type_2fa': Types2FA.GAUTH, 'password': authenticated_client.user.user_password}
-        response = authenticated_client.post(reverse('enable2fa'), data=data, format='json')
+    def test_force_true_gauth(self, authenticated_client_gauth_2fa):
+        data = {'type_2fa': Types2FA.EMAIL, 'password': authenticated_client_gauth_2fa.user.user_password}
+        response = authenticated_client_gauth_2fa.post(reverse('enable2fa'), data=data, format='json')
         response_json = response.json()
         assert response_json
-        assert response_json['msg'] == 'Two-factor verification with your Google successfully enabled.'
-        data_for_check = GoogleAuth.objects.filter(owner_id=authenticated_client.user.id).last()
-        assert data_for_check.owner.email == response_json['owner']
-        assert data_for_check.otp_auth_url == response_json['otp_auth_url']
-        assert response_json['redirect_to'] == QR_URL
-        assert response.status_code == status.HTTP_200_OK
-
-    def test_set_type_gauth_is_active_false(self, authenticated_client):
-        otp_base32 = pyotp.random_base32()
-        otp_auth_url = pyotp.totp.TOTP(otp_base32).provisioning_uri(
-            name=authenticated_client.user.email.lower(), issuer_name="Web_Menu_DA")
-        data = {'type_2fa': Types2FA.GAUTH, 'password': authenticated_client.user.user_password}
-        data_2fa = GoogleAuth.objects.create(owner_id=authenticated_client.user.id, otp_base32=otp_base32,
-                                             otp_auth_url=otp_auth_url)
-        response = authenticated_client.post(reverse('enable2fa'), data=data, format='json')
-        response_json = response.json()
-        assert response_json
-        data_for_check = GoogleAuth.objects.get(id=data_2fa.id)
-        assert data_for_check.is_active is False
+        assert response_json['msg'] == 'Two-factor verification with your email successfully enabled'
         assert response.status_code == status.HTTP_200_OK
 
 

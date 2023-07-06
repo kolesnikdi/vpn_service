@@ -6,6 +6,7 @@ import random
 import string
 
 from django.urls import reverse
+from django.core.cache import cache
 from knox.models import AuthToken
 from rest_framework.test import APIClient
 
@@ -135,23 +136,23 @@ def api_client():
     return APIClient()
 
 
-@pytest.fixture(scope='function')  # todo don't use anywhere
-def my_user(my_user_pass):
-    return my_user_pass[0]
-
-
 @pytest.fixture(scope='function')
-def my_user_pass(django_user_model, randomizer):
+def user(django_user_model, randomizer):
     password = randomizer.upp2_data()
-    user = django_user_model.objects.create_user(email=randomizer.email(), password=password)
+    user = django_user_model.objects.create_user(
+        id=randomizer.random_digits_limit(3),
+        email=randomizer.email(),
+        password=password
+    )
     user.user_password = password
     return user
 
 
 @pytest.fixture(scope='function')
-def another_user_pass(django_user_model, randomizer):
+def user_2(django_user_model, randomizer):
     password = randomizer.upp2_data()
     user = django_user_model.objects.create_user(
+        id=randomizer.random_digits_limit(3),
         email=randomizer.email(),
         password=password,
         mobile_phone=randomizer.random_phone(),
@@ -161,45 +162,52 @@ def another_user_pass(django_user_model, randomizer):
 
 
 @pytest.fixture(scope='function')
-def authenticated_client(api_client, my_user_pass):
-    api_client.user_token = AuthToken.objects.create(my_user_pass)[1]
-    api_client.user = my_user_pass
+def authenticated_client(api_client, user):
+    api_client.user_token = AuthToken.objects.create(user)[1]
+    api_client.user = user
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
     return api_client
 
 
 @pytest.fixture(scope='function')
-def authenticated_client_2_pass(another_user_pass):
+def authenticated_client_2(user_2):
     api_client = APIClient()
-    token = AuthToken.objects.create(another_user_pass)[1]
-    api_client.user_token = AuthToken.objects.create(another_user_pass)[1]
-    api_client.user = another_user_pass
+    token = AuthToken.objects.create(user_2)[1]
+    api_client.user_token = AuthToken.objects.create(user_2)[1]
+    api_client.user = user_2
     api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
     return api_client
 
 
 @pytest.fixture(scope='function')
-def authenticated_client_email_2fa(api_client, my_user_pass):
-    my_user_pass.type_2fa = Types2FA.EMAIL
-    my_user_pass.save()
-    api_client.user_token = AuthToken.objects.create(my_user_pass)[1]
-    api_client.user = my_user_pass
-    api_client.credentials(HTTP_AUTHORIZATION=f'Token {api_client.user_token}')
+def authenticated_client_email_2fa(api_client, user, randomizer):
+    user.type_2fa = Types2FA.EMAIL
+    user.save()
+    code = randomizer.random_digits_limit(6)
+    cache.set(user.id, {'code': code}, 60)
+    api_client.user_token = AuthToken.objects.create(user)[1]
+    api_client.user = user
+    api_client.credentials(
+            HTTP_AUTHORIZATION=f'Token {api_client.user_token}',
+            HTTP_2FACODE=code,
+    )
     return api_client
 
+
 @pytest.fixture(scope='function')
-def authenticated_client_gauth_2fa(api_client, my_user_pass):
-    my_user_pass.type_2fa = Types2FA.GAUTH
-    my_user_pass.save()
+def authenticated_client_gauth_2fa(api_client, user):
+    user.type_2fa = Types2FA.GAUTH
+    user.save()
     otp_base32 = pyotp.random_base32()
     otp_auth_url = pyotp.totp.TOTP(otp_base32).provisioning_uri(
-        name=my_user_pass.email.lower(),
+        name=user.email.lower(),
         issuer_name="Web_Menu_DA",
     )
-    GoogleAuth.objects.create(owner_id=my_user_pass.id, otp_base32=otp_base32, otp_auth_url=otp_auth_url)
-    api_client.user = my_user_pass
+    gauth = GoogleAuth.objects.create(owner_id=user.id, otp_base32=otp_base32, otp_auth_url=otp_auth_url)
+    api_client.user = user
+    api_client.gauth = gauth
     api_client.credentials(
-            HTTP_AUTHORIZATION=f'Token {AuthToken.objects.create(my_user_pass)[1]}',
+            HTTP_AUTHORIZATION=f'Token {AuthToken.objects.create(user)[1]}',
             HTTP_2FACODE=pyotp.TOTP(otp_base32).now(),
     )
     return api_client
@@ -233,10 +241,10 @@ def reg_done_code(api_client, reg_try, randomizer):
 
 
 @pytest.fixture(scope='function')
-def custom_company(authenticated_client_2_pass, randomizer):
+def custom_company(authenticated_client_2, randomizer):
     company_data = randomizer.company_data()
     company = Company.objects.create(
-        owner=authenticated_client_2_pass.user,
+        owner=authenticated_client_2.user,
         logo=Image.objects.create(**company_data['logo']),
         legal_name=company_data['legal_name'],
         legal_address=Address.objects.create(**company_data['legal_address']),
@@ -245,16 +253,16 @@ def custom_company(authenticated_client_2_pass, randomizer):
         phone=company_data['phone'],
         email=company_data['email'],
     )
-    company.user_password = authenticated_client_2_pass.user.user_password
-    company.user = authenticated_client_2_pass
+    company.user_password = authenticated_client_2.user.user_password
+    company.user = authenticated_client_2
     return company
 
 
 @pytest.fixture(scope='function')
-def custom_company_2(authenticated_client, randomizer):
+def custom_company_2(user, randomizer):
     company_data = randomizer.company_data()
     company = Company.objects.create(
-        owner=authenticated_client.user,
+        owner=user,
         logo=Image.objects.create(**company_data['logo']),
         legal_name=company_data['legal_name'],
         legal_address=Address.objects.create(**company_data['legal_address']),
@@ -263,8 +271,8 @@ def custom_company_2(authenticated_client, randomizer):
         phone=company_data['phone'],
         email=company_data['email'],
     )
-    company.user_password = authenticated_client.user.user_password
-    company.user = authenticated_client
+    company.user_password = user.user_password
+    company.user = user
     return company
 
 
