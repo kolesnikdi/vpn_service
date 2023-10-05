@@ -10,9 +10,6 @@ from rest_framework.settings import api_settings
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 load_dotenv()  # need for correct work os.environ.get()
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-$pso2)*$i!8k#k_y^6j_31c@6@fv66+5)m1@0o3p3ii#p*use3')
@@ -21,9 +18,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-$pso2)*$i!8k#k_y^6j_3
 DEBUG = True
 
 HOST = os.environ.get('HOST_NAME', 'http://127.0.0.1:8000')
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -40,9 +35,10 @@ INSTALLED_APPS = [
     'django_filters',
     'phonenumber_field',
     'knox',
-    'drf_yasg',
+    'drf_yasg',     # Swagger generator
     'swagger',
-    'redis',
+    'redis_app',    # was redis
+    'django_celery_beat',
 
     # applications
     'company',
@@ -53,6 +49,7 @@ INSTALLED_APPS = [
     'product',
     'menu',
     'two_factor_authentication',
+    'celery_app',
 
     # 'client',
     # 'manager',
@@ -148,7 +145,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -172,9 +168,9 @@ REST_KNOX = {
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
     'TOKEN_TTL': timedelta(hours=24),
     'USER_SERIALIZER': 'registration.serializers.WebMenuUserSerializer',  # displays all data in the view
-    'TOKEN_LIMIT_PER_USER': 2,
+    'TOKEN_LIMIT_PER_USER': 1,
     'AUTO_REFRESH': True,
-    'MIN_REFRESH_INTERVAL': 360,
+    'MIN_REFRESH_INTERVAL': 11 * 60 * 60,
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
 
@@ -224,3 +220,18 @@ Redis settings to use Redis db directly. redis_app/redis_app.py
 REDIS_HOST = 'redis_app'
 REDIS_PORT = 6379
 REDIS_DB = 1
+
+# Celery
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/'
+# CELERY_RESULT_BACKEND = is removed in celery 5.x
+
+# Celery_beat ---> make task on schedule
+# from celery.schedules import crontab
+# CELERY_BEAT_SCHEDULE = {
+#     'task-name': {
+#         'task': 'path.function',
+        # 'schedule': crontab(minute=0, hour=0, day_of_week=5), # every 5 day of the week at 00.00
+        # 'schedule': crontab(minute='*/1'), # every minute
+        # 'schedule': timedelta(seconds=60), # # every minute
+#     },
+# }

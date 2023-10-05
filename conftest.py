@@ -19,6 +19,7 @@ from registration.models import RegistrationTry
 from Web_Menu_DA.constants import Types2FA
 from two_factor_authentication.models import GoogleAuth
 
+
 """randomizers"""
 
 

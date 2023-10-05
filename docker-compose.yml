@@ -15,6 +15,7 @@ services:
     depends_on:
       - db
       - redis_app
+#      - rabbitmq
   db:
 #    image: postgres:13   # to start db without Dockerfile. disable next 3 rows
     build:
@@ -49,5 +50,57 @@ services:
     ports:
       - 6379:6379
 
+  rabbitmq:
+#    restart: always #
+    container_name: rabbitmq
+    build:
+      context: .
+      dockerfile: Docker/rabbitmq/Dockerfile
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  worker: # make task immediately
+    container_name: worker
+    build:
+      context: .
+      dockerfile: Docker/celery/Dockerfile
+    volumes:
+      - ./:/worker #
+    command: celery -A celery_app.celery worker -l info
+    env_file:
+      - Docker/.env.docker
+    depends_on:
+      - rabbitmq
+
+  beat: # make task on schedule
+    container_name: beat
+    build:
+      context: .
+      dockerfile: Docker/celery/Dockerfile
+    volumes:
+      - ./:/beat
+    command: celery -A celery_app.celery beat -l info
+    env_file:
+      - Docker/.env.docker
+    depends_on:
+      - rabbitmq
+
+  flower:
+    container_name: flower
+    build:
+      context: .
+      dockerfile: Docker/flower/Dockerfile
+    command: celery --broker=amqp://guest:guest@rabbitmq:5672/ flower --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - rabbitmq
+      - beat
+      - worker
+
 volumes:
   postgres_data:
+  rabbitmq_data:
