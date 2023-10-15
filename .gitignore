@@ -7,4 +7,4 @@ venv
 staticfiles
 .DS_Store
 /media
-/.env
+*.env
