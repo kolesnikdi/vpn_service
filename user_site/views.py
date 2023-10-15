@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import render
 from django.http import HttpResponse
 
 from user_site.business_logic import remake_links, count_site_data, get_method, authenticate_and_get_site
@@ -25,24 +24,6 @@ class UserSiteView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         UserSite.objects.create(owner=request.user, **serializer.validated_data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class GoToSiteView(generics.RetrieveAPIView):
-    """ Experiment with Iframe """
-    queryset = UserSite.objects.all()
-    serializer_class = UserSiteStatisticsSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOr404]
-
-    def get(self, request, *args, **kwargs):
-        output_size = len(request.build_absolute_uri().encode('utf-8'))
-        site = generics.get_object_or_404(self.queryset, name=kwargs['name'])
-        context = {'site_url': site.site_url}
-        responce = render(request, 'redirect.html', context)
-        input_size = len(responce.content)
-        site.statistics.clicks_number += 1
-        site.statistics.data_size += (output_size + input_size)
-        site.statistics.save()
-        return responce
 
 
 class TakeSiteAndRepresentView(generics.RetrieveAPIView):
