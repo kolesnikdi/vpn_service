@@ -1,9 +1,7 @@
 from rest_framework import serializers
-from registration.models import WebMenuUser
+from registration.models import WebUser
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
-
-from registration.models import RegistrationTry
 
 
 class LoginWebMenuUserSerializer(serializers.Serializer):
@@ -18,12 +16,37 @@ class LoginWebMenuUserSerializer(serializers.Serializer):
         raise serializers.ValidationError('Access denied: wrong username or password.')
 
 
-class WebMenuUserSerializer(serializers.ModelSerializer):
+class WebUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = WebMenuUser
+        model = WebUser
         fields = ['id', 'email', 'mobile_phone', 'first_name', 'last_name', 'fathers_name', 'country', 'city', 'street',
                   'house_number', 'flat_number', 'passport_series', 'passport_number', 'passport_date_of_issue',
                   'passport_issuing_authority']
+
+
+class WebUserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WebUser
+        fields = ['id', 'email', 'mobile_phone', 'first_name', 'last_name', 'fathers_name', 'country', 'city', 'street',
+                  'house_number', 'flat_number', 'passport_series', 'passport_number', 'passport_date_of_issue',
+                  'passport_issuing_authority']
+
+        extra_kwargs = {
+            'email': {'required': False},
+            'mobile_phone': {'required': False},
+            'first_name': {'required': False},
+            'last_name': {'required': False},
+            'fathers_name': {'required': False},
+            'country': {'required': False},
+            'city': {'required': False},
+            'street': {'required': False},
+            'house_number': {'required': False},
+            'flat_number': {'required': False},
+            'passport_series': {'required': False},
+            'passport_number': {'required': False},
+            'passport_date_of_issue': {'required': False},
+            'passport_issuing_authority': {'required': False},
+        }
 
 
 class RegisterConfirmSerializer(serializers.ModelSerializer):
@@ -31,21 +54,13 @@ class RegisterConfirmSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
-        model = WebMenuUser
-        fields = ('password', 'password2', 'first_name', 'last_name', 'fathers_name', 'mobile_phone',
+        model = WebUser
+        fields = ('password', 'password2', 'email', 'mobile_phone', 'first_name', 'last_name', 'fathers_name',
                   'country', 'city', 'street', 'house_number', 'flat_number', 'passport_series', 'passport_number',
                   'passport_date_of_issue', 'passport_issuing_authority',)
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+        attrs.pop('password2')
         return attrs
-
-
-class CreateRegisterTrySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RegistrationTry
-        fields = ('email',)
-        extra_kwargs = {
-            'email': {'required': True},
-        }

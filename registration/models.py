@@ -1,22 +1,11 @@
-import uuid
-
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
-from Web_Menu_DA.constants import Types2FA
 from registration.managers import CustomUserManager
 from phonenumber_field.modelfields import PhoneNumberField
 
 
-class RegistrationTry(models.Model):
-    email = models.EmailField(unique=True, db_index=True, max_length=254,
-                              error_messages={'unique': 'Not a valid email. Enter again and correctly.'})
-    code = models.UUIDField(db_index=True, default=uuid.uuid4)
-    creation_time = models.DateTimeField(auto_now=True)
-    confirmation_time = models.DateTimeField(null=True)
-
-
-class WebMenuUser(AbstractBaseUser, PermissionsMixin):
+class WebUser(AbstractBaseUser, PermissionsMixin):
 
     username = None
     mobile_phone = PhoneNumberField(region='UA', max_length=13, unique=True, db_index=True,
@@ -33,18 +22,17 @@ class WebMenuUser(AbstractBaseUser, PermissionsMixin):
     passport_number = models.CharField('passport number', max_length=6)
     passport_date_of_issue = models.DateField('passport date of issue', null=True)
     passport_issuing_authority = models.CharField('passport issuing authority', max_length=100)
-    email = models.EmailField(verbose_name='email address', unique=True, db_index=True, max_length=254,
+    email = models.EmailField(verbose_name='email', unique=True, db_index=True, max_length=254,
                               error_messages={'unique': 'Not a valid email. Enter again and correctly.'})
     password = models.CharField('password', max_length=128)
     is_staff = models.BooleanField('staff status', default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)
-    type_2fa = models.PositiveSmallIntegerField(choices=Types2FA.choices, default=Types2FA.DISABLED)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    objects = CustomUserManager()   # """ Need to createsuperuser"""
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.email

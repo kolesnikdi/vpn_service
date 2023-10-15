@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install netcat mc -y
 
 # Set work directory
 # Maine folder will be create with such name in docker container
-WORKDIR /WEB_menu_docker
+WORKDIR /vpn_service
 
 # Install dependencies
 RUN pip3 install --upgrade pip
@@ -19,6 +19,3 @@ RUN pip3 install -r requirements.txt
 
 # Copy project
 COPY ../.. .
-# Importante comande. Need for entrypoint.sh worck
-CMD ["bash", "-c", "chmod", "+x", "/WEB_menu_docker/Docker/entrypoint.sh"]
-ENTRYPOINT ["/WEB_menu_docker/Docker/entrypoint.sh"]

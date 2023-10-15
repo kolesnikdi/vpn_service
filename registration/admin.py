@@ -1,6 +1,4 @@
 from django.contrib import admin
-from registration.models import WebMenuUser
+from registration.models import WebUser
 
-# Register your models here.
-
-admin.site.register(WebMenuUser)
+admin.site.register(WebUser)
